@@ -1,0 +1,6 @@
+{
+  "name": "Matcha - production",
+  "mail": {
+    "host": "prod-mail-server" 
+  }
+}
