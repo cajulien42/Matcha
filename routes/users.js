@@ -7,6 +7,7 @@ const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '
 const session = driver.session();
 const router = express.Router();
 const populate = require('../database/users');
+const User = require('../models/users');
 
 
 router.use(express.json()); //populate req.body
@@ -15,13 +16,14 @@ router.use(express.urlencoded({ extended: true })); //key=value&...
 function validateUser(user) {
   const schema = {
     username: Joi.string().alphanum().min(3).max(30).required(),
-    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
-    birthyear: Joi.number().integer().min(1900).max(2013),
-    email: Joi.string().email({ minDomainSegments: 2 })
+    password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
+    birthyear: Joi.number().integer().min(1900).max(2001).required(),
+    email: Joi.string().email({ minDomainSegments: 2 }).required()
   };
   return Joi.validate(user, schema);
 }
 
+// Reset and Populate DB with garbage data
 populate();
 
 router.get('/', (req, res) => {
@@ -52,10 +54,9 @@ router.get('/:username', (req, res) => {
     );
   resultPromise
     .then(result => {
-      console.log(result);
       if (result.records.length === 1) {
         let user = {username: result.records[0]._fields[0].properties.username, password: result.records[0]._fields[0].properties.password, email: result.records[0]._fields[0].properties.email, birthyear: result.records[0]._fields[0].properties.birthyear};
-      res.json({user});
+        res.json({user});
       }
       else { 
         return res.status(404).send('User not found');
@@ -64,6 +65,29 @@ router.get('/:username', (req, res) => {
     .catch(err => { console.log(err)});
 });
 
-module.exports = router;
+// router.post('/', (req, res) => {
+//   let user = new User;
+//   let { error } = validateUser(req.body)
+//   if (error) return res.status(400).send(error.details[0].message)
+//   res.send(user.create(req.body));
+// });
 
-// let user = {username: result.records[0]._fields[0].properties.username, password: record._fields[0].properties.password, email: record._fields[0].properties.email, birthyear: record._fields[0].properties.birthyear};
+router.post('/', (req, res) => (
+  new User().create(req.body)
+    .then((user) => {
+      // console.log('It works.');
+      return res.status(200).json({
+        success: true,
+        payload: user,
+      });
+    })
+    .catch((err) => {
+      // console.log('It doesnt work');
+      return res.status(500).json({
+        success: false,
+        payload: err,
+      });
+    })
+));
+
+module.exports = router;
