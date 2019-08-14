@@ -49,7 +49,7 @@ class User {
             }
             else {
               // console.log(result.records.length);
-              reject(new Error('User exists'));
+              reject('User exists');
             }
           })
           .catch(err => {console.log(err)})
@@ -60,14 +60,16 @@ class User {
     return new Promise ((resolve, reject) => {
       let resultPromise = session.run(
         'CREATE (n:User {username: $username, password: $password, email: $email, birthyear: $birthyear}) RETURN n',
-        {username: this.user.username, password: crypto.createHash('whirlpool').digest(this.user.password), email: this.user.email, birthyear: this.user.birthyear}
+        {username: this.user.username, password: crypto.createHash('whirlpool').update(this.user.password).digest('hex'), email: this.user.email, birthyear: this.user.birthyear}
       );
       resultPromise.then(result => {
         session.close();
-      
+        if (result.records.length === 1) {
         const singleRecord = result.records[0];
         const node = singleRecord.get(0);
         resolve(node.properties);
+        }
+        else reject('An error occured')
       });
     });
   }
@@ -96,13 +98,13 @@ class User {
     })
   }
 
-  createUser(user) {
+  createUser() {
     return new Promise((resolve, reject) => (
-      this.validateNewUser(user)
-        .then((user) => this.redundancyCheck(user))
-        .then(() => this.addUser(user))
-        .then(user => resolve(user))
-        .catch(err => reject(err))
+      this.validateNewUser()
+        .then(() => this.redundancyCheck())
+        .then(() => this.addUser())
+        .then((user) => resolve(user))
+        .catch((err) => reject(err))
     ));
   }
 
