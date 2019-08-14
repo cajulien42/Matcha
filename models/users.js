@@ -33,7 +33,7 @@ class User {
     return new Promise ((resolve, reject) => {
       let resultPromise = session.run(
         'CREATE (n:User {username: $username, password: $password, email: $email, birthyear: $birthyear}) RETURN n',
-        {username: user.username, password: crypto.createHash('whirlpool').update('nodejsera', 'utf-8').digest(user.password), email: user.email, birthyear: user.birthyear}
+        {username: user.username, password: crypto.createHash('whirlpool').digest(user.password), email: user.email, birthyear: user.birthyear}
       );
       resultPromise.then(result => {
         session.close();

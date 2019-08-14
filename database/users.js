@@ -48,6 +48,16 @@ function populateUsers() {
       debug('user:', node.properties);
     });
   });
+
+  let resultPromise = session.run(
+    'MATCH (a:User), (b:User) WHERE a.username=$a_username AND b.username=$b_username CREATE (a)-[r:LIKES]->(b) RETURN r',
+    {a_username: 'Claude', b_username: 'Bob'}
+  );
+  resultPromise.then(result => {
+    session.close();
+  });
 };
+
+
 
 module.exports = populateUsers;

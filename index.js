@@ -1,6 +1,5 @@
 
 const debug = require('debug')('app:debug');
-const config = require('config');
 const apoc = require('apoc');
 const neo4j = require('neo4j-driver').v1;
 const users = require('./routes/users');
