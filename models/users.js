@@ -133,7 +133,7 @@ class User {
   deleteRelationships () {
     return new Promise ((resolve, reject) => {
       let resultPromise = session.run(
-        'MATCH p=(a)-[r]->(b) WHERE a.username=$username OR b.username=$username DELETE r RETURN r',
+        'MATCH p=(a)-[r]->(b) WHERE a.username=$username OR b.username=$username DELETE r',
         {username: this.user.username}
       );
       resultPromise.then(result => {
