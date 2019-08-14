@@ -65,15 +65,8 @@ router.get('/:username', (req, res) => {
     .catch(err => { console.log(err)});
 });
 
-// router.post('/', (req, res) => {
-//   let user = new User;
-//   let { error } = validateUser(req.body)
-//   if (error) return res.status(400).send(error.details[0].message)
-//   res.send(user.create(req.body));
-// });
-
 router.post('/', (req, res) => (
-  new User().create(req.body)
+  new User(req.body).createUser()
     .then((user) => {
       // console.log('It works.');
       return res.status(200).json({
@@ -89,5 +82,23 @@ router.post('/', (req, res) => (
       });
     })
 ));
+
+router.put('/:username', (req, res) => {
+   new User(req.body).updateUser()
+    .then((user) => {
+      return res.status(200).json({
+        success: true,
+        payload: user,
+      });
+    })
+    .catch((err) => {
+      return res.status(500).json({
+        success: false,
+        payload: err,
+      });
+    })
+});
+  
+ 
 
 module.exports = router;
