@@ -57,11 +57,9 @@ class User {
         resultPromise
           .then(result => {
             if (result.records.length === 0) {
-              // console.log(result.records.length);
               resolve (this.user);
             }
             else {
-              // console.log(result.records.length);
               reject('User exists');
             }
           })
@@ -116,7 +114,6 @@ class User {
       newProperties.forEach((property) => (changeReq = ` ${changeReq}${property} : $${property},`));
       changeReq = `${changeReq}}`;
       changeReq = changeReq.replace(',}', '}');  
-      // resolve(changeReq);
       let resultPromise = session.run(
         `MATCH (n:User {username: $username}) SET n+= ${changeReq} RETURN n`,
         this.user
