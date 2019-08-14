@@ -6,10 +6,23 @@ const crypto = require('crypto');
 
 class User {
   constructor(user){
-    this.user = user;
+    if (user && user.username) this.user = user;
+    else if (user) { 
+      this.user = {};
+      this.user.username = user;
+    }
   }
   
-  
+  validateUserAuthProperties() {
+    return new Promise ((resolve, reject) => {
+      const schema = {
+        username: Joi.string().alphanum().min(3).max(30).required(),
+        password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
+      };
+      resolve (Joi.validate(this.user, schema));
+    });
+  }
+
   validateUserProperties() {
     return new Promise ((resolve, reject) => {
       const schema = {
@@ -17,7 +30,7 @@ class User {
         password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/),
         birthyear: Joi.number().integer().min(1900).max(2001),
         email: Joi.string().email({ minDomainSegments: 2 }),
-        supertest: Joi.string().alphanum().min(3).max(30)
+        optional: Joi.string().alphanum().min(3).max(30)
       };
       resolve (Joi.validate(this.user, schema));
     });
@@ -56,26 +69,48 @@ class User {
     });
   }
 
-  addUser() {
+  getUsers() {
     return new Promise ((resolve, reject) => {
       let resultPromise = session.run(
-        'CREATE (n:User {username: $username, password: $password, email: $email, birthyear: $birthyear}) RETURN n',
-        {username: this.user.username, password: crypto.createHash('whirlpool').update(this.user.password).digest('hex'), email: this.user.email, birthyear: this.user.birthyear}
-      );
-      resultPromise.then(result => {
-        session.close();
-        if (result.records.length === 1) {
-        const singleRecord = result.records[0];
-        const node = singleRecord.get(0);
-        resolve(node.properties);
-        }
-        else reject('An error occured')
-      });
+        'MATCH (n:User) RETURN n.username'
+        );
+      resultPromise
+        .then(result => {
+          if (result.records.length !== 0) {
+            let users = [];
+            result.records.forEach(record => {
+            let user = {username: record._fields[0]};
+            users.push(user.username);
+            });
+            resolve(users);
+          }
+          else reject('No users in database')
+        })
+        .catch(err => { console.log(err)});
+    });
+  }
+
+  getUserInfo(username) {
+    return new Promise ((resolve, reject) => {
+      let resultPromise = session.run(
+        'MATCH (n:User) WHERE n.username=$username RETURN n',
+        {username: username}
+        );
+      resultPromise
+        .then(result => {
+          if (result.records.length === 1) {
+            let user = {username: result.records[0]._fields[0].properties.username, password: result.records[0]._fields[0].properties.password, email: result.records[0]._fields[0].properties.email, birthyear: result.records[0]._fields[0].properties.birthyear};
+            resolve(user);
+          }
+          else reject('User does not exist');
+        })
+        .catch(err => { console.log(err)});
     });
   }
 
   changeUserProperies() {
     return new Promise ((resolve, reject) => {
+      this.user.password = crypto.createHash('whirlpool').update(this.user.password).digest('hex');
       const newProperties = Object.keys(this.user);
       let changeReq = '{';
       newProperties.forEach((property) => (changeReq = ` ${changeReq}${property} : $${property},`));
@@ -98,6 +133,53 @@ class User {
     })
   }
 
+  deleteRelationships () {
+    return new Promise ((resolve, reject) => {
+      let resultPromise = session.run(
+        'MATCH p=(a)-[r]->(b) WHERE a.username=$username OR b.username=$username DELETE r RETURN r',
+        {username: this.user.username}
+      );
+      resultPromise.then(result => {
+        session.close();
+        resolve(true);
+      });
+    })
+  }
+
+  deleteNode() {
+    return new Promise ((resolve, reject) => {
+      let resultPromise = session.run(
+        'MATCH (n:User) WHERE n.username=$username DELETE n RETURN n',
+        {username: this.user.username}
+      );
+      resultPromise.then(result => {
+        session.close();
+        if (result.records.length === 1) {
+          resolve(this.user.username);
+        }
+        else reject('User not found')
+      });
+    })
+  }
+
+  addUser() {
+    return new Promise ((resolve, reject) => {
+      let resultPromise = session.run(
+        'CREATE (n:User {username: $username, password: $password, email: $email, birthyear: $birthyear}) RETURN n',
+        {username: this.user.username, password: crypto.createHash('whirlpool').update(this.user.password).digest('hex'), email: this.user.email, birthyear: this.user.birthyear}
+      );
+      resultPromise.then(result => {
+        session.close();
+        if (result.records.length === 1) {
+          const singleRecord = result.records[0];
+          const node = singleRecord.get(0);
+          resolve(node.properties);
+        }
+        else reject('An error occured')
+      });
+    });
+  }
+
   createUser() {
     return new Promise((resolve, reject) => (
       this.validateNewUser()
@@ -113,6 +195,16 @@ class User {
       this.validateUserProperties()
       .then(() => this.changeUserProperies())
       .then((user)=> resolve(user))
+      .catch(err => reject(err))
+    ));
+  }
+
+  deleteUser() {
+    return new Promise((resolve, reject) => (
+      this.validateUserProperties()
+      .then(() => this.deleteRelationships())
+      .then(() => this.deleteNode())
+      .then((user) => resolve(user))
       .catch(err => reject(err))
     ));
   }
