@@ -7,7 +7,7 @@ const _ = require('lodash');
 router.use(express.json()); //populate req.body
 router.use(express.urlencoded({ extended: true })); //key=value&...
 
-requiredProperties = ['username', 'password'];
+const requiredProperties = ['username', 'password'];
 
 router.post('/', async (req, res) => (
   new User(_.pick(req.body, requiredProperties)).authenticateUser()

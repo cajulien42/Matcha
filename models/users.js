@@ -1,3 +1,4 @@
+const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
@@ -28,7 +29,7 @@ class User {
   }
   
   validateUserAuthProperties() {
-    return new Promise ((resolve, reject) => {
+    return new Promise ((resolve) => {
       const schema = {
         username: Joi.string().alphanum().min(3).max(30).required(),
         password : new PasswordComplexity(this.passwordRequirements).required(),
@@ -38,10 +39,10 @@ class User {
   }
 
   validateUserProperties() {
-    return new Promise ((resolve, reject) => {
+    return new Promise ((resolve) => {
       const schema = {
         username: Joi.string().alphanum().min(3).max(30).required(),
-        password : new PasswordComplexity(this.passwordRequirements).required(),
+        password : new PasswordComplexity(this.passwordRequirements),
         birthyear: Joi.number().integer().min(1900).max(2001),
         email: Joi.string().email({ minDomainSegments: 2 }),
         optional: Joi.string().alphanum().min(3).max(30)
@@ -51,10 +52,9 @@ class User {
   }
 
   validateNewUser() {
-    return new Promise ((resolve, reject) => {
+    return new Promise ((resolve) => {
       const schema = {
         username: Joi.string().alphanum().min(3).max(30).required(),
-        // password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
         password : new PasswordComplexity(this.passwordRequirements).required(),
         birthyear: Joi.number().integer().min(1900).max(2001).required(),
         email: Joi.string().email({ minDomainSegments: 2 }).required(),
@@ -79,7 +79,7 @@ class User {
               reject('User exists');
             }
           })
-          .catch(err => {console.log(err)})
+          .catch(err => {debug(err)})
     });
   }
 
@@ -100,7 +100,7 @@ class User {
           }
           else reject('No users in database')
         })
-        .catch(err => { console.log(err)});
+        .catch(err => { debug(err)});
     });
   }
 
@@ -118,17 +118,17 @@ class User {
           }
           else reject('bad request');
         })
-        .catch(err => { console.log(err)});
+        .catch(err => { debug(err)});
     });
   }
 
   deleteRelationships () {
-    return new Promise ((resolve, reject) => {
+    return new Promise ((resolve) => {
       let resultPromise = session.run(
         'MATCH p=(a)-[r]->(b) WHERE a.username=$username OR b.username=$username DELETE r',
         {username: this.user.username}
       );
-      resultPromise.then(result => {
+      resultPromise.then(() => {
         session.close();
         resolve(true);
       });
@@ -151,10 +151,11 @@ class User {
     })
   }
 
-  changeUserProperies() {
-    return new Promise (async (resolve, reject) => {
-      const salt = await bcrypt.genSalt(10);
-      this.user.password = await bcrypt.hash(this.user.password, salt);
+
+
+  changeUserProperies(hash) {
+    return new Promise ((resolve, reject) => {
+      if (hash) this.user.password =  hash;
       const newProperties = Object.keys(this.user);
       let changeReq = '{';
       newProperties.forEach((property) => (changeReq = ` ${changeReq}${property} : $${property},`));
@@ -176,10 +177,9 @@ class User {
     })
   }
 
-  addUser() {
-    return new Promise (async (resolve, reject) => {
-      const salt = await bcrypt.genSalt(10);
-      this.user.password = await bcrypt.hash(this.user.password, salt);
+  addUser(hash) {
+    return new Promise ((resolve, reject) => {
+      this.user.password =  hash;
       const newProperties = Object.keys(this.user);
       let addReq = '{';
       newProperties.forEach((property) => (addReq = ` ${addReq}${property} : $${property},`));
@@ -201,22 +201,38 @@ class User {
     });
   }
 
-  matchPasswords(user) {
-    return new Promise(async (resolve, reject) => {
-      const valid = await bcrypt.compare(this.user.password, user.password)
-      if (valid) {
-        resolve(user);
-      }
-      else reject('Bad request');
+  hashGenerator() {
+    return new Promise((resolve) => {
+    if (this.user.password) {
+    bcrypt.genSalt(10)
+      .then((salt) => bcrypt.hash(this.user.password, salt))
+      .then(hash => resolve(hash))
+      .catch(err => debug(err));
+    }
+    else resolve(null);
     });
-    
+  }
+
+  matchPasswords(user) {
+    return new Promise((resolve, reject) => {
+      debug(this.user.password, user.password);
+      bcrypt.compare(this.user.password, user.password)
+        .then((valid) => {
+          if (valid === true) {
+            resolve(user);
+          }
+          else reject('bad request');
+        })
+        .catch(err => reject(err));
+    })
   }
 
   createUser() {
     return new Promise((resolve, reject) => (
       this.validateNewUser()
         .then(() => this.redundancyCheck())
-        .then(() => this.addUser())
+        .then(() => this.hashGenerator())
+        .then((hash) => this.addUser(hash))
         .then((user) => resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
         .catch((err) => reject(err))
     ));
@@ -225,7 +241,8 @@ class User {
   updateUser() {
     return new Promise((resolve, reject) => (
       this.validateUserProperties()
-      .then(() => this.changeUserProperies())
+      .then(() => this.hashGenerator())
+      .then((hash) => this.changeUserProperies(hash))
       .then((user)=> resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
       .catch(err => reject(err))
     ));
