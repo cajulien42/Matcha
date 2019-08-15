@@ -1,4 +1,5 @@
 
+const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
@@ -6,7 +7,8 @@ const User = require('../models/users');
 
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
-
+const requiredProperties = ['username', 'password', 'email', 'birthyear'];
+const optionalProperties = ['optional'];
 
 router.get('/', async (req, res) => {
   new User().getUsers()
@@ -41,8 +43,9 @@ router.get('/:username', async (req, res) => {
 });
 
 router.post('/', async (req, res) => (
-  new User(req.body).createUser()
+  new User(_.pick(req.body, requiredProperties.concat(optionalProperties))).createUser()
     .then((user) => {
+      console.log(requiredProperties.concat(optionalProperties));
       return res.status(200).json({
         success: true,
         payload: {value: 'create' ,user},
@@ -57,7 +60,7 @@ router.post('/', async (req, res) => (
 ));
 
 router.put('/:username', async (req, res) => {
-   new User(req.body).updateUser()
+   new User(_.pick(req.body, requiredProperties.concat(optionalProperties))).updateUser()
     .then((user) => {
       return res.status(200).json({
         success: true,

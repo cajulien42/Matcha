@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
 const session = driver.session();
@@ -5,12 +6,15 @@ const Joi = require('@hapi/joi');
 const crypto = require('crypto');
 
 class User {
+
   constructor(user){
     if (user && user.username) this.user = user;
     else if (user) { 
       this.user = {};
       this.user.username = user;
     }
+    this.publicProperties = ['username', 'email', 'birthyear'];
+    this.optionalProperties = ['optional'];
   }
   
   validateUserAuthProperties() {
@@ -42,7 +46,8 @@ class User {
         username: Joi.string().alphanum().min(3).max(30).required(),
         password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
         birthyear: Joi.number().integer().min(1900).max(2001).required(),
-        email: Joi.string().email({ minDomainSegments: 2 }).required()
+        email: Joi.string().email({ minDomainSegments: 2 }).required(),
+        optional: Joi.string().alphanum().min(3).max(30)
       };
       resolve (Joi.validate(this.user, schema));
     });
@@ -98,7 +103,7 @@ class User {
         .then(result => {
           if (result.records.length === 1) {
             let user = {username: result.records[0]._fields[0].properties.username, password: result.records[0]._fields[0].properties.password, email: result.records[0]._fields[0].properties.email, birthyear: result.records[0]._fields[0].properties.birthyear};
-            resolve(user);
+            resolve(_.pick(user, ['username', 'email', 'birthyear']));
           }
           else reject('User does not exist');
         })
@@ -161,9 +166,15 @@ class User {
 
   addUser() {
     return new Promise ((resolve, reject) => {
+      this.user.password = crypto.createHash('whirlpool').update(this.user.password).digest('hex');
+      const newProperties = Object.keys(this.user);
+      let addReq = '{';
+      newProperties.forEach((property) => (addReq = ` ${addReq}${property} : $${property},`));
+      addReq = `${addReq}}`;
+      addReq = addReq.replace(',}', '}');
       let resultPromise = session.run(
-        'CREATE (n:User {username: $username, password: $password, email: $email, birthyear: $birthyear}) RETURN n',
-        {username: this.user.username, password: crypto.createHash('whirlpool').update(this.user.password).digest('hex'), email: this.user.email, birthyear: this.user.birthyear}
+        `CREATE (n:User ${addReq}) RETURN n`,
+        this.user
       );
       resultPromise.then(result => {
         session.close();
@@ -182,7 +193,7 @@ class User {
       this.validateNewUser()
         .then(() => this.redundancyCheck())
         .then(() => this.addUser())
-        .then((user) => resolve(user))
+        .then((user) => resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
         .catch((err) => reject(err))
     ));
   }
@@ -191,7 +202,7 @@ class User {
     return new Promise((resolve, reject) => (
       this.validateUserProperties()
       .then(() => this.changeUserProperies())
-      .then((user)=> resolve(user))
+      .then((user)=> resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
       .catch(err => reject(err))
     ));
   }
