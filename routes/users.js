@@ -29,9 +29,10 @@ router.get('/', async (req, res) => {
 router.get('/:username', async (req, res) => {
   new User().getUserInfo(req.params.username)
     .then((user) => {
+      const res = _.pick(user, ['username','email','birthyear']);
       return res.status(200).json({
         success: true,
-        payload: {value: 'read', user},
+        payload: {value: 'read', res},
       });
     })
     .catch((err) => {
@@ -45,7 +46,6 @@ router.get('/:username', async (req, res) => {
 router.post('/', async (req, res) => (
   new User(_.pick(req.body, requiredProperties.concat(optionalProperties))).createUser()
     .then((user) => {
-      console.log(requiredProperties.concat(optionalProperties));
       return res.status(200).json({
         success: true,
         payload: {value: 'create' ,user},

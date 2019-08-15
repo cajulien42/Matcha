@@ -2,6 +2,7 @@ const debug = require('debug')('app:debug');
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
 const session = driver.session();
+const bcrypt = require('bcrypt');
 
 function populateUsers() {
   session.run('MATCH p=()-[r]->() DELETE p');
@@ -10,31 +11,33 @@ function populateUsers() {
   const users = [
     {
       username: 'Jean',
-      password: 'B913D5BBB8E461C2C5961CBE0EDCDADFD29F068225CEB37DA6DEFCF89849368F8C6C2EB6A4C4AC75775D032A0ECFDFE8550573062B653FE92FC7B8FB3B7BE8D6',
+      password : 'test',
       email: 'jean@gmail.com',
       birthyear: '1715'
     },
     {
       username: 'Bob',
-      password: 'B913D5BBB8E461C2C5961CBE0EDCDADFD29F068225CEB37DA6DEFCF89849368F8C6C2EB6A4C4AC75775D032A0ECFDFE8550573062B653FE92FC7B8FB3B7BE8D6',
+      password : 'test',
       email: 'marley@gmail.com',
       birthyear: '1879'
     },
     {
       username: 'Pilip',
-      password: 'B913D5BBB8E461C2C5961CBE0EDCDADFD29F068225CEB37DA6DEFCF89849368F8C6C2EB6A4C4AC75775D032A0ECFDFE8550573062B653FE92FC7B8FB3B7BE8D6',
+      password : 'test',
       email: 'pilip@gmail.com',
       birthyear: '1998'
     },
     {
       username: 'Claude',
-      password: 'B913D5BBB8E461C2C5961CBE0EDCDADFD29F068225CEB37DA6DEFCF89849368F8C6C2EB6A4C4AC75775D032A0ECFDFE8550573062B653FE92FC7B8FB3B7BE8D6',
+      password : 'test',
       email: 'claude@gmail.com',
       birthyear: '2018'
     },
   ];
 
-  users.forEach((user) => {
+  users.forEach(async (user) => {
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(user.password, salt);
     let resultPromise = session.run(
       'CREATE (n:User {username: $username, password: $password, email: $email, birthyear: $birthyear}) RETURN n',
       {username: user.username, password: user.password, email: user.email, birthyear: user.birthyear}
