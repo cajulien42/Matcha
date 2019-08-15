@@ -106,6 +106,7 @@ class User {
 
   getUserInfo() {
     return new Promise ((resolve, reject) => {
+      debug(this.user);
       let resultPromise = session.run(
         'MATCH (n:User) WHERE n.username=$username RETURN n',
         {username: this.user.username}

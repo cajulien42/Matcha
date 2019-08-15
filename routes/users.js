@@ -1,4 +1,4 @@
-
+const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
@@ -27,15 +27,16 @@ router.get('/', async (req, res) => {
 });
 
 router.get('/:username', async (req, res) => {
-  new User().getUserInfo(req.params.username)
+  new User(req.params.username).getUserInfo()
     .then((user) => {
-      const res = _.pick(user, ['username','email','birthyear']);
+      const result = _.pick(user, ['username','email','birthyear']);
       return res.status(200).json({
         success: true,
-        payload: {value: 'read', res},
+        payload: {value: 'read', result},
       });
     })
     .catch((err) => {
+      debug(err);
       return res.status(500).json({
         success: false,
         payload: err,
