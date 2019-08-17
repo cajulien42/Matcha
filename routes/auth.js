@@ -14,7 +14,7 @@ router.post('/', async (req, res) => (
   new User(_.pick(req.body, requiredProperties)).authenticateUser()
     .then((user) => {
       const token = jwt.sign({username: user.username}, config.get('jwtPrivateKey'));
-      return res.status(200).json({
+      return res.header('x-auth-token', token).status(200).json({
         success: true,
         payload: token,
       });

@@ -7,13 +7,20 @@ const _ = require('lodash');
 const debug = require('debug')('app:debug');
 
 const requiredProperties = ['username', 'password', 'email', 'birthyear'];
-const optionalProperties = ['optional'];
+const optionalProperties = ['optional', 'isAdmin'];
 const users = [
   {
     username: 'Jean',
     password : 'Test123*',
     email: 'jean@gmail.com',
     birthyear: '1905'
+  },
+  {
+    username: 'Camille',
+    password : 'Test123*',
+    email: 'kamillejulien@gmail.com',
+    birthyear: '1905',
+    isAdmin : "true"
   },
   {
     username: 'Bob',

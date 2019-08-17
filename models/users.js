@@ -14,13 +14,35 @@ class User {
       this.user = {};
       this.user.username = user;
     }
+
+    this.allProperties = ['username', 'password', 'email', 'birthyear', 'optional', 'isAdmin'];
     this.publicProperties = ['username', 'email', 'birthyear'];
-    this.optionalProperties = ['optional'];
-    this.creationRequirements = {required : ['username', 'password' , 'email', 'birthyear'], optional: ['optional']};
-    this.authRequirements = {required : ['username', 'password']};
-    this.updateRequirements = {required : ['username'],  optional : ['password' , 'email', 'birthyear', 'optional']};
-    this.deleteRequirements = {required : ['username']};
-    this.getRequirements = {required : ['username']};
+    this.optionalProperties = ['optional', 'isAdmin'];
+
+    this.creationRequirements = {
+      username : true,
+      password: true ,
+      email: true,
+      birthyear : true,
+      isAdmin: false,
+    };
+
+    this.authRequirements = {
+      username : true,
+      password: true ,
+    };
+
+    this.updateRequirements = {
+      username : true,
+    };
+
+    this.deleteRequirements = {
+      username : true,
+    };
+
+    this.getRequirements = {
+      username : true,
+    };
   }
   
   redundancyCheck() {

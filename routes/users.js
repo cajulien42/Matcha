@@ -1,3 +1,4 @@
+const auth = require('../middleware/auth');
 const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const express = require('express');
@@ -61,7 +62,7 @@ router.post('/', async (req, res) => (
     })
 ));
 
-router.put('/:username', async (req, res) => {
+router.put('/:username', auth, async (req, res) => {
    new User(_.pick(req.body, requiredProperties.concat(optionalProperties))).updateUser()
     .then((user) => {
       return res.status(200).json({
@@ -77,7 +78,7 @@ router.put('/:username', async (req, res) => {
     })
 });
 
-router.delete('/:username', (req, res) => {
+router.delete('/:username', auth, async (req, res) => {
   new User(req.params.username).deleteUser()
   .then((user) => {
     return res.status(200).json({
