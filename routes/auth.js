@@ -1,21 +1,22 @@
-
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
 const _ = require('lodash');
 
-router.use(express.json()); //populate req.body
-router.use(express.urlencoded({ extended: true })); //key=value&...
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 const requiredProperties = ['username', 'password'];
 
 router.post('/', async (req, res) => (
   new User(_.pick(req.body, requiredProperties)).authenticateUser()
     .then((user) => {
-      const result = _.pick(user, ['username']);
+      const token = jwt.sign({username: user.username}, config.get('jwtPrivateKey'));
       return res.status(200).json({
         success: true,
-        payload: {value: 'authenticate' , result},
+        payload: token,
       });
     })
     .catch((err) => {

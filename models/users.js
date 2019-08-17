@@ -3,9 +3,8 @@ const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
 const session = driver.session();
-const Joi = require('@hapi/joi');
 const bcrypt = require('bcrypt');
-const PasswordComplexity = require('joi-password-complexity');
+const Validator = require('./validator');
 
 class User {
 
@@ -17,53 +16,12 @@ class User {
     }
     this.publicProperties = ['username', 'email', 'birthyear'];
     this.optionalProperties = ['optional'];
-    this.passwordRequirements = {
-      min: 7,
-      max: 20,
-      lowerCase: 1,
-      upperCase: 1,
-      numeric: 1,
-      symbol: 1,
-      requirementCount: 1,
-    };
+    this.creationRequirements = {required : ['username', 'password' , 'email', 'birthyear'], optional: ['optional']};
+    this.authRequirements = {required : ['username', 'password']};
+    this.updateRequirements = {required : ['username'],  optional : ['password' , 'email', 'birthyear', 'optional']};
+    this.deleteRequirements = {required : ['username']};
   }
   
-  validateUserAuthProperties() {
-    return new Promise ((resolve) => {
-      const schema = {
-        username: Joi.string().alphanum().min(3).max(30).required(),
-        password : new PasswordComplexity(this.passwordRequirements).required(),
-      };
-      resolve (Joi.validate(this.user, schema));
-    });
-  }
-
-  validateUserProperties() {
-    return new Promise ((resolve) => {
-      const schema = {
-        username: Joi.string().alphanum().min(3).max(30).required(),
-        password : new PasswordComplexity(this.passwordRequirements),
-        birthyear: Joi.number().integer().min(1900).max(2001),
-        email: Joi.string().email({ minDomainSegments: 2 }),
-        optional: Joi.string().alphanum().min(3).max(30)
-      };
-      resolve (Joi.validate(this.user, schema));
-    });
-  }
-
-  validateNewUser() {
-    return new Promise ((resolve) => {
-      const schema = {
-        username: Joi.string().alphanum().min(3).max(30).required(),
-        password : new PasswordComplexity(this.passwordRequirements).required(),
-        birthyear: Joi.number().integer().min(1900).max(2001).required(),
-        email: Joi.string().email({ minDomainSegments: 2 }).required(),
-        optional: Joi.string().alphanum().min(3).max(30)
-      };
-      resolve (Joi.validate(this.user, schema));
-    });
-  }
-
   redundancyCheck() {
     return new Promise ((resolve, reject) => {
       let resultPromise = session.run(
@@ -81,6 +39,32 @@ class User {
           })
           .catch(err => {debug(err)})
     });
+  }
+
+  hashGenerator() {
+    return new Promise((resolve) => {
+    if (this.user.password) {
+    bcrypt.genSalt(10)
+      .then((salt) => bcrypt.hash(this.user.password, salt))
+      .then(hash => resolve(hash))
+      .catch(err => debug(err));
+    }
+    else resolve(null);
+    });
+  }
+
+  matchPasswords(user) {
+    return new Promise((resolve, reject) => {
+      debug(this.user.password, user.password);
+      bcrypt.compare(this.user.password, user.password)
+        .then((valid) => {
+          if (valid === true) {
+            resolve(user);
+          }
+          else reject('bad request');
+        })
+        .catch(err => reject(err));
+    })
   }
 
   getUsers() {
@@ -152,8 +136,6 @@ class User {
     })
   }
 
-
-
   changeUserProperies(hash) {
     return new Promise ((resolve, reject) => {
       if (hash) this.user.password =  hash;
@@ -202,35 +184,9 @@ class User {
     });
   }
 
-  hashGenerator() {
-    return new Promise((resolve) => {
-    if (this.user.password) {
-    bcrypt.genSalt(10)
-      .then((salt) => bcrypt.hash(this.user.password, salt))
-      .then(hash => resolve(hash))
-      .catch(err => debug(err));
-    }
-    else resolve(null);
-    });
-  }
-
-  matchPasswords(user) {
-    return new Promise((resolve, reject) => {
-      debug(this.user.password, user.password);
-      bcrypt.compare(this.user.password, user.password)
-        .then((valid) => {
-          if (valid === true) {
-            resolve(user);
-          }
-          else reject('bad request');
-        })
-        .catch(err => reject(err));
-    })
-  }
-
   createUser() {
     return new Promise((resolve, reject) => (
-      this.validateNewUser()
+      new Validator(this.creationRequirements, this.user).validate()
         .then(() => this.redundancyCheck())
         .then(() => this.hashGenerator())
         .then((hash) => this.addUser(hash))
@@ -241,7 +197,7 @@ class User {
 
   updateUser() {
     return new Promise((resolve, reject) => (
-      this.validateUserProperties()
+      new Validator(this.updateRequirements, this.user).validate()
       .then(() => this.hashGenerator())
       .then((hash) => this.changeUserProperies(hash))
       .then((user)=> resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
@@ -251,7 +207,7 @@ class User {
 
   deleteUser() {
     return new Promise((resolve, reject) => (
-      this.validateUserProperties()
+      new Validator(this.deleteRequirements, this.user).validate()
       .then(() => this.deleteRelationships())
       .then(() => this.deleteNode())
       .then((user) => resolve(user))
@@ -261,7 +217,7 @@ class User {
 
   authenticateUser() {
     return new Promise((resolve, reject) => (
-      this.validateUserAuthProperties()
+      new Validator(this.authRequirements, this.user).validate()
         .then(() => this.getUserInfo())
         .then((existingUser) => this.matchPasswords(existingUser))
         .then((existingUser) => resolve(existingUser))

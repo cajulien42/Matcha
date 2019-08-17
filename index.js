@@ -1,4 +1,5 @@
 
+const config = require('config');
 const debug = require('debug')('app:debug');
 const users = require('./routes/users');
 const home = require('./routes/home');
@@ -8,6 +9,11 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const app = express();
 const populate = require('./database/users');
+
+if (!config.get('jwtPrivateKey')) {
+  debug('FATAL ERROR: jwtPrivateKey is not defined.');
+  process.exit(1);
+}
 
 app.use(express.static('public'));
 app.use(morgan('tiny'));
