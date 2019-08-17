@@ -78,8 +78,8 @@ class User {
           if (result.records.length !== 0) {
             let users = [];
             result.records.forEach(record => {
-            let user = {username: record._fields[0]};
-            users.push(user.username);
+            debug(record._fields[0]);
+            users.push(record._fields[0]);
             });
             resolve(users);
           }
@@ -91,7 +91,7 @@ class User {
 
   getUserInfo() {
     return new Promise ((resolve, reject) => {
-      debug(this.user);
+      // debug(this.user);
       new Validator(this.getRequirements, this.user).validate()
       .then(() => session.run(
         'MATCH (n:User) WHERE n.username=$username RETURN n',
@@ -99,8 +99,9 @@ class User {
       ))
       .then(result => {
         if (result.records.length === 1) {
-          let user = {username: result.records[0]._fields[0].properties.username, password: result.records[0]._fields[0].properties.password, email: result.records[0]._fields[0].properties.email, birthyear: result.records[0]._fields[0].properties.birthyear};
-          resolve(user, ['username','password', 'email', 'birthyear']);
+          let user = result.records[0]._fields[0].properties;
+          debug(_.pick(user, this.publicProperties));
+          resolve(_.pick(user, this.publicProperties));
         }
         else reject('bad request');
       })

@@ -29,10 +29,9 @@ router.get('/', async (req, res) => {
 router.get('/:username', async (req, res) => {
   new User(req.params.username).getUserInfo()
     .then((user) => {
-      const result = _.pick(user, ['username','email','birthyear']);
       return res.status(200).json({
         success: true,
-        payload: {value: 'read', result},
+        payload: {value: 'read', user},
       });
     })
     .catch((err) => {
