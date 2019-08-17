@@ -100,8 +100,8 @@ class User {
       .then(result => {
         if (result.records.length === 1) {
           let user = result.records[0]._fields[0].properties;
-          debug(_.pick(user, this.publicProperties));
-          resolve(_.pick(user, this.publicProperties));
+          debug(user);
+          resolve(user);
         }
         else reject('bad request');
       })

@@ -9,6 +9,7 @@ router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 const requiredProperties = ['username', 'password', 'email', 'birthyear'];
 const optionalProperties = ['optional'];
+const publicProperties = ['username', 'email', 'birthyear', 'optional'];
 
 router.get('/', async (req, res) => {
   new User().getUsers()
@@ -29,9 +30,10 @@ router.get('/', async (req, res) => {
 router.get('/:username', async (req, res) => {
   new User(req.params.username).getUserInfo()
     .then((user) => {
+      const result = _.pick(user, publicProperties);
       return res.status(200).json({
         success: true,
-        payload: {value: 'read', user},
+        payload: {value: 'read', result},
       });
     })
     .catch((err) => {
