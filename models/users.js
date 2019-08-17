@@ -1,3 +1,6 @@
+
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
@@ -82,6 +85,7 @@ class User {
       bcrypt.compare(this.user.password, user.password)
         .then((valid) => {
           if (valid === true) {
+            debug('matching', user);
             resolve(user);
           }
           else reject('bad request');
@@ -122,7 +126,7 @@ class User {
       .then(result => {
         if (result.records.length === 1) {
           let user = result.records[0]._fields[0].properties;
-          debug(user);
+          debug('Current :',user);
           resolve(user);
         }
         else reject('bad request');
@@ -208,6 +212,12 @@ class User {
     });
   }
 
+  generateAuthToken(user) {
+    debug('Auth : ', user);
+    const token = jwt.sign({username: user.username, isAdmin: user.isAdmin}, config.get('jwtPrivateKey'));
+    return token
+  }
+
   createUser() {
     return new Promise((resolve, reject) => (
       new Validator(this.creationRequirements, this.user).validate()
@@ -244,7 +254,8 @@ class User {
       new Validator(this.authRequirements, this.user).validate()
         .then(() => this.getUserInfo())
         .then((existingUser) => this.matchPasswords(existingUser))
-        .then((existingUser) => resolve(existingUser))
+        .then((existingUser) => this.generateAuthToken(existingUser))
+        .then((token) => resolve(token))
         .catch(err => reject(err))
     ));
   }

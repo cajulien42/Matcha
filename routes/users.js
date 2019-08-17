@@ -1,4 +1,5 @@
 const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const express = require('express');
@@ -78,7 +79,7 @@ router.put('/:username', auth, async (req, res) => {
     })
 });
 
-router.delete('/:username', auth, async (req, res) => {
+router.delete('/:username', [auth, admin] , async (req, res) => {
   new User(req.params.username).deleteUser()
   .then((user) => {
     return res.status(200).json({
