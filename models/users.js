@@ -20,6 +20,7 @@ class User {
     this.authRequirements = {required : ['username', 'password']};
     this.updateRequirements = {required : ['username'],  optional : ['password' , 'email', 'birthyear', 'optional']};
     this.deleteRequirements = {required : ['username']};
+    this.getRequirements = {required : ['username']};
   }
   
   redundancyCheck() {
@@ -91,19 +92,19 @@ class User {
   getUserInfo() {
     return new Promise ((resolve, reject) => {
       debug(this.user);
-      let resultPromise = session.run(
+      new Validator(this.getRequirements, this.user).validate()
+      .then(() => session.run(
         'MATCH (n:User) WHERE n.username=$username RETURN n',
         {username: this.user.username}
-        );
-      resultPromise
-        .then(result => {
-          if (result.records.length === 1) {
-            let user = {username: result.records[0]._fields[0].properties.username, password: result.records[0]._fields[0].properties.password, email: result.records[0]._fields[0].properties.email, birthyear: result.records[0]._fields[0].properties.birthyear};
-            resolve(user, ['username','password', 'email', 'birthyear']);
-          }
-          else reject('bad request');
-        })
-        .catch(err => { debug(err)});
+      ))
+      .then(result => {
+        if (result.records.length === 1) {
+          let user = {username: result.records[0]._fields[0].properties.username, password: result.records[0]._fields[0].properties.password, email: result.records[0]._fields[0].properties.email, birthyear: result.records[0]._fields[0].properties.birthyear};
+          resolve(user, ['username','password', 'email', 'birthyear']);
+        }
+        else reject('bad request');
+      })
+      .catch(err => { debug(err)});
     });
   }
 
