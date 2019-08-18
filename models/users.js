@@ -63,8 +63,9 @@ class User {
   hashGenerator() {
     return new Promise((resolve) => {
       if (this.user.password) {
+        const data = this.user.password;
         bcrypt.genSalt(10)
-          .then(salt => bcrypt.hash(this.user.password, salt))
+          .then((salt) => { debug(salt, data); bcrypt.hash(data, salt); })
           .then(hash => resolve(hash))
           .catch(err => debug(err));
       } resolve(null);
