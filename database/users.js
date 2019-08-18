@@ -4,7 +4,7 @@ const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '
 const session = driver.session();
 const User = require('../models/users');
 const _ = require('lodash');
-const debug = require('debug')('app:debug');
+const debug = require('debug')('app:startup');
 
 const requiredProperties = ['username', 'password', 'email', 'birthyear'];
 const optionalProperties = ['optional', 'isAdmin'];
@@ -44,6 +44,7 @@ const users = [
 
 function resetDb() {
   return new Promise ((resolve) => {
+    debug('Reseting DB...');
     session.run('MATCH p=()-[r]->() DELETE p')
     .then(() => {session.run('MATCH (n) DELETE n')})
     .then(() => resolve(true))
@@ -55,6 +56,7 @@ function populateUsers() {
   return new Promise ((resolve) => {
     resetDb()
     .then(() => {
+      debug('Populating DB...');
       users.forEach((user) => {
         new User(_.pick(user, requiredProperties.concat(optionalProperties))).createUser()
       });

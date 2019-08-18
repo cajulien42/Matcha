@@ -1,18 +1,17 @@
+const debug = require('debug')('app:route_user');
 const identify = require('../middleware/identify');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
-const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const express = require('express');
 const router = express.Router();
 const User = require('../models/users');
-
-
-router.use(express.json());
-router.use(express.urlencoded({ extended: true }));
 const requiredProperties = ['username', 'password', 'email', 'birthyear'];
 const optionalProperties = ['optional'];
 const publicProperties = ['username', 'email', 'birthyear', 'optional'];
+
+router.use(express.json());
+router.use(express.urlencoded({ extended: true }));
 
 router.get('/', async (req, res) => {
   new User().getUsers()

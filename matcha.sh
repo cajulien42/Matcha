@@ -1,2 +1,2 @@
 export matcha_jwtPrivateKey=aSecureKey
-DEBUG=app:debug nodemon index.js
+DEBUG=app:startup,app:model_user,app:route_user nodemon index.js

@@ -1,7 +1,7 @@
 
+const debug = require('debug')('app:model_user');
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const debug = require('debug')('app:debug');
 const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
@@ -50,20 +50,20 @@ class User {
   
   redundancyCheck() {
     return new Promise ((resolve, reject) => {
-      let resultPromise = session.run(
+      debug('Checkin for', this.user.username, this.user.email, 'in database.');
+      session.run(
         'MATCH (n:User) WHERE n.username=$username OR n.email=$email RETURN n',
         {username: this.user.username, email: this.user.email}
-        );
-        resultPromise
-          .then(result => {
-            if (result.records.length === 0) {
-              resolve (this.user);
-            }
-            else {
-              reject('User exists');
-            }
-          })
-          .catch(err => {debug(err)})
+        )
+        .then(result => {
+          if (result.records.length === 0) {
+            resolve (this.user);
+          }
+          else {
+            reject('User exists');
+          }
+        })
+        .catch(err => {debug(err)})
     });
   }
 
@@ -81,11 +81,10 @@ class User {
 
   matchPasswords(user) {
     return new Promise((resolve, reject) => {
-      // debug(this.user.password, user.password);
       bcrypt.compare(this.user.password, user.password)
         .then((valid) => {
           if (valid === true) {
-            // debug('matching', user);
+            debug('Verifying password for :', user.username);
             resolve(user);
           }
           else reject('bad request');
@@ -104,9 +103,9 @@ class User {
           if (result.records.length !== 0) {
             let users = [];
             result.records.forEach(record => {
-            // debug(record._fields[0]);
             users.push(record._fields[0]);
             });
+            debug('Records :', users);
             resolve(users);
           }
           else reject('No users in database')
@@ -117,7 +116,7 @@ class User {
 
   getUserInfo() {
     return new Promise ((resolve, reject) => {
-      // debug(this.user);
+      debug('Getting user info for :', this.user);
       new Validator(this.getRequirements, this.user).validate()
       .then(() => session.run(
         'MATCH (n:User) WHERE n.username=$username RETURN n',
@@ -126,7 +125,7 @@ class User {
       .then(result => {
         if (result.records.length === 1) {
           let user = result.records[0]._fields[0].properties;
-          debug('Current :',user);
+          debug('Data fetched:',user);
           resolve(user);
         }
         else reject('bad request');
@@ -157,6 +156,7 @@ class User {
       resultPromise.then(result => {
         session.close();
         if (result.records.length === 1) {
+          debug('Deleted user :', this.username);
           resolve(this.user.username);
         }
         else reject('User not found')
@@ -205,6 +205,7 @@ class User {
         if (result.records.length === 1) {
           const singleRecord = result.records[0];
           const node = singleRecord.get(0);
+          debug('User added to DB :', node.properties);
           resolve(node.properties);
         }
         else reject('An error occured')
@@ -213,8 +214,8 @@ class User {
   }
 
   generateAuthToken(user) {
-    // debug('Auth : ', user);
     const token = jwt.sign({username: user.username, isAdmin: user.isAdmin}, config.get('jwtPrivateKey'));
+    debug('Generating Auth token :', token);
     return token
   }
 
