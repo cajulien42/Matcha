@@ -19,9 +19,9 @@ class User {
     }
 
     this.allProperties = ['username', 'password', 'email', 'birthyear', 'optional', 'isAdmin'];
-    this.publicProperties = ['username', 'email', 'birthyear'];
+    this.publicProperties = ['username', 'email', 'birthyear', 'optional'];
     this.optionalProperties = ['optional', 'isAdmin'];
-
+    
     this.creationRequirements = {
       username : true,
       password: true ,
@@ -29,20 +29,16 @@ class User {
       birthyear : true,
       isAdmin: false,
     };
-
     this.authRequirements = {
       username : true,
       password: true ,
     };
-
     this.updateRequirements = {
       username : true,
     };
-
     this.deleteRequirements = {
       username : true,
     };
-
     this.getRequirements = {
       username : true,
     };
@@ -156,7 +152,7 @@ class User {
       resultPromise.then(result => {
         session.close();
         if (result.records.length === 1) {
-          debug('Deleted user :', this.username);
+          debug('Deleted user :', this.user.username);
           resolve(this.user.username);
         }
         else reject('User not found')
