@@ -1,8 +1,6 @@
-
 {
-  "parser": "babel-eslint",
   "extends": [
-    "eslint:recommended"
+    "airbnb-base"
   ],
   "env": {
     "browser": true,
@@ -18,6 +16,8 @@
     "padded-blocks": "off",
     "no-console": "warn",
     "func-names": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_fields"] }],
+    "newline-per-chained-call": "off",
     "no-param-reassign": [
       "error",
       {

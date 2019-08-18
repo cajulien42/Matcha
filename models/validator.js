@@ -1,13 +1,13 @@
 
 const Joi = require('@hapi/joi');
-const PasswordComplexity = require('joi-password-complexity');
+const Complexity = require('joi-password-complexity');
 
 class Validator {
 
   constructor(requirements, data) {
-    this.required = requirements;
+    this.req = requirements;
     this.data = data;
-    this.passwordRequirements = {
+    this.passwordConf = {
       min: 7,
       max: 20,
       lowerCase: 1,
@@ -19,21 +19,28 @@ class Validator {
   }
 
   validate() {
-    return new Promise ((resolve) => {
-      const schema = {};
-      if (this.required.username) schema.username = Joi.string().alphanum().min(3).max(30).required()
-      else schema.username = Joi.string().alphanum().min(3).max(30)
-      if (this.required.password) schema.password = new PasswordComplexity(this.passwordRequirements).required()
-      else schema.password = new PasswordComplexity(this.passwordRequirements)
-      if (this.required.birthyear) schema.birthyear = Joi.number().integer().min(1900).max(2001).required()
-      else schema.birthyear = Joi.number().integer().min(1900).max(2001)
-      if (this.required.email) schema.email = Joi.string().email({ minDomainSegments: 2 }).required()
-      else schema.email = Joi.string().email({ minDomainSegments: 2 })
-      if (this.required.optional) schema.optional = Joi.string().alphanum().min(3).max(30).required()
-      else schema.optional = Joi.string().alphanum().min(3).max(30)
-      if (this.required.isAdmin) schema.isAdmin = Joi.string().alphanum().min(3).max(30).required()
-      else schema.isAdmin = Joi.string().alphanum().min(3).max(30)
-      resolve (Joi.validate(this.data, schema));
+    return new Promise((resolve) => {
+      const sch = {};
+
+      if (this.req.username) sch.username = Joi.string().alphanum().min(3).max(30).required();
+      else sch.username = Joi.string().alphanum().min(3).max(30);
+
+      if (this.req.password) sch.password = new Complexity(this.passwordConf).required();
+      else sch.password = new Complexity(this.passwordConf);
+
+      if (this.req.birthyear) sch.birthyear = Joi.number().integer().min(1900).max(2001).required();
+      else sch.birthyear = Joi.number().integer().min(1900).max(2001);
+
+      if (this.req.email) sch.email = Joi.string().email({ minDomainSegments: 2 }).required();
+      else sch.email = Joi.string().email({ minDomainSegments: 2 });
+
+      if (this.req.optional) sch.optional = Joi.string().alphanum().min(3).max(30).required();
+      else sch.optional = Joi.string().alphanum().min(3).max(30);
+
+      if (this.req.isAdmin) sch.isAdmin = Joi.string().alphanum().min(3).max(30).required();
+      else sch.isAdmin = Joi.string().alphanum().min(3).max(30);
+
+      resolve(Joi.validate(this.data, sch));
     });
   }
 }
