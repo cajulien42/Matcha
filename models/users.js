@@ -65,7 +65,7 @@ class User {
       if (this.user.password) {
         const data = this.user.password;
         bcrypt.genSalt(10)
-          .then((salt) => { debug(salt, data); bcrypt.hash(data, salt); })
+          .then(salt => bcrypt.hash(data, salt))
           .then(hash => resolve(hash))
           .catch(err => debug(err));
       } resolve(null);
