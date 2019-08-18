@@ -81,11 +81,11 @@ class User {
 
   matchPasswords(user) {
     return new Promise((resolve, reject) => {
-      debug(this.user.password, user.password);
+      // debug(this.user.password, user.password);
       bcrypt.compare(this.user.password, user.password)
         .then((valid) => {
           if (valid === true) {
-            debug('matching', user);
+            // debug('matching', user);
             resolve(user);
           }
           else reject('bad request');
@@ -104,7 +104,7 @@ class User {
           if (result.records.length !== 0) {
             let users = [];
             result.records.forEach(record => {
-            debug(record._fields[0]);
+            // debug(record._fields[0]);
             users.push(record._fields[0]);
             });
             resolve(users);
@@ -213,7 +213,7 @@ class User {
   }
 
   generateAuthToken(user) {
-    debug('Auth : ', user);
+    // debug('Auth : ', user);
     const token = jwt.sign({username: user.username, isAdmin: user.isAdmin}, config.get('jwtPrivateKey'));
     return token
   }

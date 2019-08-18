@@ -1,3 +1,4 @@
+const identify = require('../middleware/identify');
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
 const debug = require('debug')('app:debug');
@@ -29,7 +30,7 @@ router.get('/', async (req, res) => {
     })
 });
 
-router.get('/:username', async (req, res) => {
+router.get('/:username', auth, identify, async (req, res) => {
   new User(req.params.username).getUserInfo()
     .then((user) => {
       const result = _.pick(user, publicProperties);
@@ -63,7 +64,7 @@ router.post('/', async (req, res) => (
     })
 ));
 
-router.put('/:username', auth, async (req, res) => {
+router.put('/:username', auth, identify, async (req, res) => {
    new User(_.pick(req.body, requiredProperties.concat(optionalProperties))).updateUser()
     .then((user) => {
       return res.status(200).json({
