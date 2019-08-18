@@ -50,63 +50,54 @@ class User {
       session.run(
         'MATCH (n:User) WHERE n.username=$username OR n.email=$email RETURN n',
         {username: this.user.username, email: this.user.email}
-        )
-        .then(result => {
-          if (result.records.length === 0) {
-            resolve (this.user);
-          }
-          else {
-            reject('User exists');
-          }
-        })
-        .catch(err => {debug(err)})
+      )
+      .then(result => {
+        if (result.records.length === 0) { resolve (this.user) }
+        else { reject('User exists') }
+      })
+      .catch(err => { debug('An error during redundancy check :', err) });
     });
   }
 
   hashGenerator() {
     return new Promise((resolve) => {
-    if (this.user.password) {
-    bcrypt.genSalt(10)
-      .then((salt) => bcrypt.hash(this.user.password, salt))
-      .then(hash => resolve(hash))
-      .catch(err => debug(err));
-    }
-    else resolve(null);
+      if (this.user.password) {
+        bcrypt.genSalt(10)
+        .then((salt) => bcrypt.hash(this.user.password, salt))
+        .then(hash => resolve(hash))
+        .catch(err => debug(err));
+      }
+      else resolve(null);
     });
   }
 
   matchPasswords(user) {
     return new Promise((resolve, reject) => {
       bcrypt.compare(this.user.password, user.password)
-        .then((valid) => {
-          if (valid === true) {
-            debug('Verifying password for :', user.username);
-            resolve(user);
-          }
-          else reject('bad request');
-        })
-        .catch(err => reject(err));
+      .then((valid) => {
+        if (valid === true) {
+          debug('Verifying password for :', user.username);
+          resolve(user);
+        }
+        else reject('bad request');
+      })
+      .catch(err => reject(err));
     })
   }
 
   getUsers() {
     return new Promise ((resolve, reject) => {
-      let resultPromise = session.run(
-        'MATCH (n:User) RETURN n.username'
-        );
-      resultPromise
-        .then(result => {
-          if (result.records.length !== 0) {
-            let users = [];
-            result.records.forEach(record => {
-            users.push(record._fields[0]);
-            });
-            debug('Records :\n', users);
-            resolve(users);
-          }
-          else reject('No users in database')
-        })
-        .catch(err => { debug(err)});
+      session.run('MATCH (n:User) RETURN n.username')
+      .then(result => {
+        if (result.records.length !== 0) {
+          let users = [];
+          result.records.forEach(record => { users.push(record._fields[0]) });
+          debug('Records :\n', users);
+          resolve(users);
+        }
+        else reject('No users in database')
+      })
+      .catch(err => { debug('An error occured while fetching user list :', err)});
     });
   }
 
@@ -126,37 +117,39 @@ class User {
         }
         else reject('bad request');
       })
-      .catch(err => { debug(err)});
+      .catch(err => { debug('An error occured while fetching user info :', err) });
     });
   }
 
   deleteRelationships () {
     return new Promise ((resolve) => {
-      let resultPromise = session.run(
+      session.run(
         'MATCH p=(a)-[r]->(b) WHERE a.username=$username OR b.username=$username DELETE r',
         {username: this.user.username}
-      );
-      resultPromise.then(() => {
+      )
+      .then(() => {
         session.close();
         resolve(true);
-      });
+      })
+      .catch(err => { debug('An error occured during relationship deletion :', err) });
     })
   }
 
   deleteNode() {
     return new Promise ((resolve, reject) => {
-      let resultPromise = session.run(
+      session.run(
         'MATCH (n:User) WHERE n.username=$username DELETE n RETURN n',
         {username: this.user.username}
-      );
-      resultPromise.then(result => {
+      )
+      .then(result => {
         session.close();
         if (result.records.length === 1) {
           debug('Deleted user :', this.user.username);
           resolve(this.user.username);
         }
         else reject('User not found')
-      });
+      })
+      .cacth(err => {debug('An error occured during node deletion :', err)});
     })
   }
 
@@ -168,11 +161,11 @@ class User {
       newProperties.forEach((property) => (changeReq = ` ${changeReq}${property} : $${property},`));
       changeReq = `${changeReq}}`;
       changeReq = changeReq.replace(',}', '}');  
-      let resultPromise = session.run(
+      session.run(
         `MATCH (n:User {username: $username}) SET n+= ${changeReq} RETURN n`,
         this.user
-      );
-      resultPromise.then(result => {
+      )
+      .then(result => {
         session.close();
         if (result.records.length === 1) {
           const singleRecord = result.records[0];
@@ -180,7 +173,8 @@ class User {
           resolve('Updated user :\n', node.properties);
         }
         else reject('Informations does not match existing user')
-      });
+      })
+      .catch(err => debug('An error occured during user information update :', err))
     })
   }
 
@@ -192,11 +186,12 @@ class User {
       newProperties.forEach((property) => (addReq = ` ${addReq}${property} : $${property},`));
       addReq = `${addReq}}`;
       addReq = addReq.replace(',}', '}');
-      let resultPromise = session.run(
+      
+      session.run(
         `CREATE (n:User ${addReq}) RETURN n`,
         this.user
-      );
-      resultPromise.then(result => {
+      )
+      .then(result => {
         session.close();
         if (result.records.length === 1) {
           const singleRecord = result.records[0];
@@ -205,7 +200,8 @@ class User {
           resolve(node.properties);
         }
         else reject('An error occured')
-      });
+      })
+      .catch(err => debug('An error occured while adding new user :', err))
     });
   }
 
@@ -218,11 +214,11 @@ class User {
   createUser() {
     return new Promise((resolve, reject) => (
       new Validator(this.creationRequirements, this.user).validate()
-        .then(() => this.redundancyCheck())
-        .then(() => this.hashGenerator())
-        .then((hash) => this.addUser(hash))
-        .then((user) => resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
-        .catch((err) => reject(err))
+      .then(() => this.redundancyCheck())
+      .then(() => this.hashGenerator())
+      .then((hash) => this.addUser(hash))
+      .then((user) => resolve(_.pick(user, this.publicProperties.concat(this.optionalProperties))))
+      .catch((err) => reject(err))
     ));
   }
 
@@ -249,11 +245,11 @@ class User {
   authenticateUser() {
     return new Promise((resolve, reject) => (
       new Validator(this.authRequirements, this.user).validate()
-        .then(() => this.getUserInfo())
-        .then((existingUser) => this.matchPasswords(existingUser))
-        .then((existingUser) => this.generateAuthToken(existingUser))
-        .then((token) => resolve(token))
-        .catch(err => reject(err))
+      .then(() => this.getUserInfo())
+      .then((existingUser) => this.matchPasswords(existingUser))
+      .then((existingUser) => this.generateAuthToken(existingUser))
+      .then((token) => resolve(token))
+      .catch(err => reject(err))
     ));
   }
 }
