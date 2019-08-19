@@ -7,7 +7,7 @@ const neo4j = require('neo4j-driver').v1;
 const bcrypt = require('bcrypt');
 const Validator = require('./validator');
 
-const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
+const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', 'Ff7midgar6'));
 const session = driver.session();
 
 class User {
@@ -65,10 +65,10 @@ class User {
       if (this.user.password) {
         const data = this.user.password;
         bcrypt.genSalt(10)
-          .then(salt => bcrypt.hash(data, salt))
-          .then(hash => resolve(hash))
+          .then((salt) => bcrypt.hash(data, salt))
+          .then((hash) => resolve(hash))
           .catch(err => debug(err));
-      } resolve(null);
+      } else resolve(null);
     });
   }
 
@@ -79,7 +79,7 @@ class User {
           if (valid === true) {
             debug('Verifying password for :', user.username);
             resolve(user);
-          } reject(new Error('bad request'));
+          } else reject(new Error('bad request'));
         })
         .catch(err => reject(err));
     });
@@ -113,7 +113,7 @@ class User {
             const user = result.records[0]._fields[0].properties;
             debug('Data fetched :\n', user);
             resolve(user);
-          } reject(new Error('bad request'));
+          } else reject(new Error('bad request'));
         })
         .catch((err) => { debug('An error occured while fetching user info :', err); });
     });
@@ -144,7 +144,7 @@ class User {
           if (result.records.length === 1) {
             debug('Deleted user :', this.user.username);
             resolve(this.user.username);
-          } reject(new Error('User not found'));
+          } else reject(new Error('User not found'));
         })
         .cacth((err) => { debug('An error occured during node deletion :', err); });
     });
@@ -168,7 +168,7 @@ class User {
             const singleRecord = result.records[0];
             const node = singleRecord.get(0);
             resolve('Updated user :\n', node.properties);
-          } reject(new Error('Informations does not match existing user'));
+          } else reject(new Error('Informations does not match existing user'));
         })
         .catch(err => debug('An error occured during user information update :', err));
     });
@@ -177,6 +177,7 @@ class User {
   addUser(hash) {
     return new Promise((resolve, reject) => {
       this.user.password = hash;
+      debug('has : ', this.user.password );
       const newProperties = Object.keys(this.user);
       let addReq = '{';
       newProperties.forEach((property) => { addReq = ` ${addReq}${property} : $${property},`; });
@@ -191,7 +192,7 @@ class User {
             const node = singleRecord.get(0);
             debug('User added to DB :\n', node.properties);
             resolve(node.properties);
-          } reject(new Error('An error occured'));
+          } else reject(new Error('An error occured'));
         })
         .catch(err => debug('An error occured while adding new user :', err));
     });
