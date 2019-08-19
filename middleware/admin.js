@@ -1,4 +1,4 @@
-const debug = require('debug')('app:middleware');
+const debug = require('debug')('app:middleware_admin');
 
 module.exports = (req, res, next) => {
   if (!req.user.isAdmin) {

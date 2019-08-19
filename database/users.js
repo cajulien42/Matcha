@@ -4,7 +4,7 @@ const debug = require('debug')('app:startup');
 const _ = require('lodash');
 const User = require('../models/users');
 
-const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', 'Ff7midgar6'));
+const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
 const session = driver.session();
 
 

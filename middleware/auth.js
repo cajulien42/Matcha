@@ -1,4 +1,4 @@
-const debug = require('debug')('app:middleware');
+const debug = require('debug')('app:middleware_auth');
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
