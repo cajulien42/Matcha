@@ -1,9 +1,10 @@
 const debug = require('debug')('app:middleware_error');
 
-module.exports = (err, res) => {
+module.exports = (err, req, res, next) => {
   debug(err);
-  res.status(400).json({
-    success: false,
-    payload: err,
-  });
+  return (
+    res.status(400).json({
+      success: false,
+      payload: err.message,
+    }));
 };

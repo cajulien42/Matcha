@@ -146,7 +146,7 @@ class User {
             resolve(this.user.username);
           } else reject(new Error('User not found'));
         })
-        .cacth((err) => { debug('An error occured during node deletion :', err); });
+        .catch((err) => { debug('An error occured during node deletion :', err); });
     });
   }
 
