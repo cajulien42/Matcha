@@ -30,12 +30,6 @@ router.get('/', asyncMiddleware(async (req, res) => {
         payload: { value: 'read', users },
       })
     ))
-    .catch(err => (
-      res.status(500).json({
-        success: false,
-        payload: err,
-      })
-    ))
   );
 }));
 

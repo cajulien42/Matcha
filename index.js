@@ -8,6 +8,7 @@ const users = require('./routes/users');
 const home = require('./routes/home');
 const auth = require('./routes/auth');
 const populate = require('./database/users');
+const error = require('./middleware/error');
 
 const app = express();
 
@@ -25,6 +26,8 @@ app.use(morgan('tiny'));
 app.use('/', home);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
+
+app.use(error);
 
 populate()
   .then(() => {
