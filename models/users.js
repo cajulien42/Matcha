@@ -65,8 +65,8 @@ class User {
       if (this.user.password) {
         const data = this.user.password;
         bcrypt.genSalt(10)
-          .then((salt) => bcrypt.hash(data, salt))
-          .then((hash) => resolve(hash))
+          .then(salt => bcrypt.hash(data, salt))
+          .then(hash => resolve(hash))
           .catch(err => debug(err));
       } else resolve(null);
     });
@@ -94,7 +94,7 @@ class User {
             result.records.forEach((record) => { this.users.push(record._fields[0]); });
             debug('Records :\n', this.users);
             resolve(this.users);
-          } reject(new Error('No users in database'));
+          } else reject(new Error('No users in database'));
         })
         .catch((err) => { debug('An error occured while fetching user list :', err); });
     });
@@ -177,7 +177,6 @@ class User {
   addUser(hash) {
     return new Promise((resolve, reject) => {
       this.user.password = hash;
-      debug('has : ', this.user.password );
       const newProperties = Object.keys(this.user);
       let addReq = '{';
       newProperties.forEach((property) => { addReq = ` ${addReq}${property} : $${property},`; });
