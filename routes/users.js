@@ -14,7 +14,14 @@ const publicProperties = ['username', 'email', 'birthyear', 'optional'];
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
-router.get('/', async (req, res) => {
+function asyncMiddleware(handler) {
+  return async (req, res, next) => {
+    handler(req, res)
+      .catch(err => next(err));
+  };
+}
+
+router.get('/', asyncMiddleware(async (req, res) => {
   debug('Requesting user list...');
   return (new User().getUsers()
     .then(users => (
@@ -30,7 +37,7 @@ router.get('/', async (req, res) => {
       })
     ))
   );
-});
+}));
 
 router.get('/:username', [auth, identify], async (req, res) => {
   debug('Request to get user information for :', req.params.username);
