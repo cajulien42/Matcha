@@ -42,7 +42,7 @@ const test = {
 const required = [true, false];
 const properties = ['username', 'password', 'email', 'birthyear', 'optional', 'isAdmin', 'test'];
 
-const template = {
+const template = [
   username,
   password,
   email,
@@ -50,25 +50,50 @@ const template = {
   optional,
   isAdmin,
   test,
-};
+];
 
-test('Validator - username - required and passed', () => {
-  const result = new Validator(reqU, uTrue).validate();
-  expect(result).resolves.toEqual(uTrue);
-});
+// test('Validator - username - required and passed', () => {
+//   const result = new Validator(reqU, uTrue).validate();
+//   expect(result).resolves.toEqual(uTrue);
+// });
 
-test('Validator - username - required and not passed', () => {
-  const result = new Validator(reqU, uFalse).validate();
-  expect(result).rejects.toEqual(Error);
-});
+// test('Validator - username - required and not passed', () => {
+//   const result = new Validator(reqU, uFalse).validate();
+//   expect(result).rejects.toEqual(Error);
+// });
 
 function templatedTest(testedProperty, isRequired, valid, property, requirement) {
-  return (() => {
-    test(`validator-${testedProperty}-${isRequired}-${valid}`, () => {
-      if (isRequired && valid) {
-        const result = new Validator(requirement, property.validValue);
-        expect(result).resolves.toEqual(property);
-      }
-    });
+  test(`validator-${testedProperty}-${isRequired}-${valid}`, () => {
+    if (isRequired && valid) {
+      const result = new Validator(requirement, property.validValue);
+      expect(result).resolves.toEqual(property);
+    } else if (isRequired && !valid) {
+      const result = new Validator(requirement, property.invalidValue);
+      expect(result).rejects.toEqual(Error);
+    } else if (!isRequired && !valid) {
+      const result = new Validator(requirement, property.invalidValue);
+      expect(result).rejects.toEqual(Error);
+    } else if (!isRequired && valid) {
+      const result = new Validator(requirement, property.invalidValue);
+      expect(result).resolves.toEqual(property);
+    }
   });
 }
+
+test('Validator', () => {
+  properties.forEach((property) => {
+    required.forEach((bool) => {
+      const requirement = {};
+      requirement[property] = bool;
+      templatedTest(property, bool, bool, template[property], requirement);
+      templatedTest(property, bool, !bool, template[property], requirement);
+      templatedTest(property, !bool, bool, template[property], requirement);
+      templatedTest(property, !bool, !bool, template[property], requirement);
+      requirement[property] = !bool;
+      templatedTest(property, bool, bool, template[property], requirement);
+      templatedTest(property, bool, !bool, template[property], requirement);
+      templatedTest(property, !bool, bool, template[property], requirement);
+      templatedTest(property, !bool, !bool, template[property], requirement);
+    });
+  });
+});
