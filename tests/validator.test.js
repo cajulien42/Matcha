@@ -1,19 +1,55 @@
 const Validator = require('../models/validator');
 
-const reqU = {
-  username: true,
+const schema = {
+  property: ['validValue', 'invalidValue'],
 };
 
-const uTrue = {
-  username: 'JeanMich',
+const username = {
+  validValue: 'JeanMich',
+  invalidValue: '123456',
 };
 
-const uFalse = {
-  email: 'lala',
+const password = {
+  validValue: 'Test12345*',
+  invalidValue: 'tabouret',
 };
 
-const uInc = {
-  username: 79841,
+const email = {
+  validValue: 'kamillejulien@gmail.com',
+  invalidValue: 'tabouret',
+};
+
+const birthyear = {
+  validValue: '1998',
+  invalidValue: 'tabouret',
+};
+
+const optional = {
+  validValue: 'jaimeleschevres',
+  invalidValue: '123 456',
+};
+
+const isAdmin = {
+  validValue: true,
+  invalidValue: 'yes',
+};
+
+const test = {
+  validValue: 'test',
+  invalidValue: 'test',
+};
+
+const required = [true, false];
+const properties = ['username', 'password', 'email', 'birthyear', 'optional', 'isAdmin', 'test'];
+
+const template = {
+  username,
+  password,
+  email,
+  birthyear,
+  optional,
+  isAdmin,
+  test,
 };
 
 test('Validator - username - required and passed', () => {
@@ -25,3 +61,14 @@ test('Validator - username - required and not passed', () => {
   const result = new Validator(reqU, uFalse).validate();
   expect(result).rejects.toEqual(Error);
 });
+
+function templatedTest(testedProperty, isRequired, valid, property, requirement) {
+  return (() => {
+    test(`validator-${testedProperty}-${isRequired}-${valid}`, () => {
+      if (isRequired && valid) {
+        const result = new Validator(requirement, property.validValue);
+        expect(result).resolves.toEqual(property);
+      }
+    });
+  });
+}
