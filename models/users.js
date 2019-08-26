@@ -167,7 +167,7 @@ class User {
           if (result.records.length === 1) {
             const singleRecord = result.records[0];
             const node = singleRecord.get(0);
-            resolve('Updated user :\n', node.properties);
+            resolve(node.properties);
           } else reject(new Error('Informations does not match existing user'));
         })
         .catch(err => debug('An error occured during user information update :', err));

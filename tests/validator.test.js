@@ -1,99 +1,62 @@
+
+const each = require('jest-each').default;
 const Validator = require('../models/validator');
 
-const schema = {
-  property: ['validValue', 'invalidValue'],
-};
-
-const username = {
-  validValue: 'JeanMich',
-  invalidValue: '123456',
-};
-
-const password = {
-  validValue: 'Test12345*',
-  invalidValue: 'tabouret',
-};
-
-const email = {
-  validValue: 'kamillejulien@gmail.com',
-  invalidValue: 'tabouret',
-};
-
-const birthyear = {
-  validValue: '1998',
-  invalidValue: 'tabouret',
-};
-
-const optional = {
-  validValue: 'jaimeleschevres',
-  invalidValue: '123 456',
-};
-
-const isAdmin = {
-  validValue: true,
-  invalidValue: 'yes',
-};
-
-const test = {
-  validValue: 'test',
-  invalidValue: 'test',
-};
-
-const required = [true, false];
-const properties = ['username', 'password', 'email', 'birthyear', 'optional', 'isAdmin', 'test'];
-
-const template = [
-  username,
-  password,
-  email,
-  birthyear,
-  optional,
-  isAdmin,
-  test,
+const validUsers = [
+  {
+    username: 'Jean',
+    password: 'Test123*',
+    email: 'jean@gmail.com',
+    birthyear: '1905',
+  },
+  {
+    username: 'Camille',
+    password: 'Test123*',
+    email: 'kamillejulien@gmail.com',
+    birthyear: '1905',
+    isAdmin: 'true',
+  },
+  {
+    username: 'Bob',
+    password: 'Test123*',
+    email: 'marley@gmail.com',
+    birthyear: '1906',
+  },
+  {
+    username: 'Pilip',
+    password: 'Test123*',
+    email: 'pilip@gmail.com',
+    birthyear: '1998',
+  },
+  {
+    username: 'Claude',
+    password: 'Test123*',
+    email: 'claude@gmail.com',
+    birthyear: '2000',
+    test: 'test',
+  },
 ];
 
-// test('Validator - username - required and passed', () => {
-//   const result = new Validator(reqU, uTrue).validate();
-//   expect(result).resolves.toEqual(uTrue);
-// });
+const requirements = [
+  {
+    username: false,
+    password: false,
+    email: false,
+    birthyear: false,
+    optional: false,
+    isAdmin: false,
+  },
+];
 
-// test('Validator - username - required and not passed', () => {
-//   const result = new Validator(reqU, uFalse).validate();
-//   expect(result).rejects.toEqual(Error);
-// });
-
-function templatedTest(testedProperty, isRequired, valid, property, requirement) {
-  test(`validator-${testedProperty}-${isRequired}-${valid}`, () => {
-    if (isRequired && valid) {
-      const result = new Validator(requirement, property.validValue);
-      expect(result).resolves.toEqual(property);
-    } else if (isRequired && !valid) {
-      const result = new Validator(requirement, property.invalidValue);
-      expect(result).rejects.toEqual(Error);
-    } else if (!isRequired && !valid) {
-      const result = new Validator(requirement, property.invalidValue);
-      expect(result).rejects.toEqual(Error);
-    } else if (!isRequired && valid) {
-      const result = new Validator(requirement, property.invalidValue);
-      expect(result).resolves.toEqual(property);
-    }
+each`
+  property    | requirement    | expected
+  ${validUsers[0]} | ${requirements} | ${validUsers[0]}
+  ${validUsers[1]} | ${requirements} | ${validUsers[1]}
+  ${validUsers[2]} | ${requirements} | ${validUsers[2]}
+  ${validUsers[3]} | ${requirements} | ${validUsers[3]}
+  ${validUsers[4]} | ${requirements} | ${validUsers[4]}
+`.test('returns input when promise resolves', async ({ property, requirement, expected }) => {
+    const promise = new Validator(requirement, property).validate();
+    const result = await promise;
+    expect(promise).resolves.toBe(expected).catch(err => console.log(err));
   });
-}
-
-test('Validator', () => {
-  properties.forEach((property) => {
-    required.forEach((bool) => {
-      const requirement = {};
-      requirement[property] = bool;
-      templatedTest(property, bool, bool, template[property], requirement);
-      templatedTest(property, bool, !bool, template[property], requirement);
-      templatedTest(property, !bool, bool, template[property], requirement);
-      templatedTest(property, !bool, !bool, template[property], requirement);
-      requirement[property] = !bool;
-      templatedTest(property, bool, bool, template[property], requirement);
-      templatedTest(property, bool, !bool, template[property], requirement);
-      templatedTest(property, !bool, bool, template[property], requirement);
-      templatedTest(property, !bool, !bool, template[property], requirement);
-    });
-  });
-});
