@@ -33,20 +33,19 @@ const validUsers = [
     password: 'Test123*',
     email: 'claude@gmail.com',
     birthyear: '2000',
-    test: 'lala',
   },
 ];
 
-const requirements = [
-  {
-    username: false,
-    password: false,
-    email: false,
-    birthyear: false,
-    optional: false,
-    isAdmin: false,
-  },
-];
+const requirements = {
+  username: false,
+  password: false,
+  email: false,
+  birthyear: false,
+  optional: false,
+  isAdmin: false,
+};
+
+// Valid Inpput tests
 
 each`
   property    | requirement    | expected
@@ -55,8 +54,7 @@ each`
   ${validUsers[2]} | ${requirements} | ${validUsers[2]}
   ${validUsers[3]} | ${requirements} | ${validUsers[3]}
   ${validUsers[4]} | ${requirements} | ${validUsers[4]}
-`.test('Valid inputs: returns input when promise resolves', async ({ property, requirement, expected }) => {
+`.test('Valid input: $property\n Requirements: $requirement\n Expected: $expected\n', ({ property, requirement, expected }) => {
     const promise = new Validator(requirement, property).validate();
-    const result = await promise;
     expect(promise).resolves.toBe(expected).catch(err => debug(err));
   });
