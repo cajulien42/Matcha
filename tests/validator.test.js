@@ -1,4 +1,4 @@
-
+const debug = require('debug')('app:test');
 const each = require('jest-each').default;
 const Validator = require('../models/validator');
 
@@ -33,7 +33,7 @@ const validUsers = [
     password: 'Test123*',
     email: 'claude@gmail.com',
     birthyear: '2000',
-    test: 'test',
+    test: 'lala',
   },
 ];
 
@@ -55,8 +55,8 @@ each`
   ${validUsers[2]} | ${requirements} | ${validUsers[2]}
   ${validUsers[3]} | ${requirements} | ${validUsers[3]}
   ${validUsers[4]} | ${requirements} | ${validUsers[4]}
-`.test('returns input when promise resolves', async ({ property, requirement, expected }) => {
+`.test('Valid inputs: returns input when promise resolves', async ({ property, requirement, expected }) => {
     const promise = new Validator(requirement, property).validate();
     const result = await promise;
-    expect(promise).resolves.toBe(expected).catch(err => console.log(err));
+    expect(promise).resolves.toBe(expected).catch(err => debug(err));
   });
