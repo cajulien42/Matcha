@@ -2,6 +2,8 @@ const debug = require('debug')('app:test');
 const each = require('jest-each').default;
 const Validator = require('../models/validator');
 
+// Valid Inpput tests
+
 const validUsers = [
   {
     username: 'Jean',
@@ -44,8 +46,6 @@ const requirements = {
   optional: false,
   isAdmin: false,
 };
-
-// Valid Inpput tests
 
 each`
   property    | requirement    | expected
