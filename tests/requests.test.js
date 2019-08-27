@@ -37,5 +37,5 @@ const users = [
 ];
 
 test('GET request : /api/users, expect list of users', () => {
-  expect(req).resolves.toEqual(true).catch(err => debug(err));
+  expect(req).resolves.toBeTruthy().then(res => expect(res).resolves.toBe(true)).catch(err => debug(err));
 });
