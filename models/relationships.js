@@ -11,16 +11,17 @@ const session = driver.session();
 
 class Relationships extends User {
 
-  constructor(users) {
+  constructor(relation) {
     super();
-    if (users.user_a && users.user_b && users.relation) this.users = users;
+    if (relation.user_a && relation.user_b && relation.type) this.relation = relation;
+    else if (relation.type) this.relation = relation;
     else return false;
   }
 
   addRelationShip() {
     return new Promise((resolve, reject) => {
-      debug(this.users.user_a, this.users.user_b, this.users.relation);
-      const query = `MATCH (a:User {username: '${this.users.user_a}'}), (b:User {username: '${this.users.user_b}'}) CREATE (a)-[r:${this.users.relation}]->(b) RETURN type(r)`;
+      debug(this.relation.user_a, this.relation.user_b, this.relation.relation);
+      const query = `MATCH (a:User {username: '${this.relation.user_a}'}), (b:User {username: '${this.relation.user_b}'}) CREATE (a)-[r:${this.relation.type}]->(b) RETURN type(r)`;
       session.run(query)
         .then((res) => {
           session.close();
@@ -32,6 +33,10 @@ class Relationships extends User {
           reject(err);
         });
     });
+  }
+
+  deleteRelationships() {
+
   }
 }
 

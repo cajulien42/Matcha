@@ -48,7 +48,7 @@ const users = [
 const relationships = {
   user_a: 'Jean',
   user_b: 'Bob',
-  relation: 'LIKES',
+  type: 'LIKES',
 };
 
 function resetDb() {
