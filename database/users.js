@@ -3,6 +3,7 @@ const neo4j = require('neo4j-driver').v1;
 const debug = require('debug')('app:startup');
 const _ = require('lodash');
 const User = require('../models/users');
+const RelationShips = require('../models/relationships');
 
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
 const session = driver.session();
@@ -44,6 +45,12 @@ const users = [
   },
 ];
 
+const relationships = {
+  user_a: 'Jean',
+  user_b: 'Bob',
+  relation: 'LIKES',
+};
+
 function resetDb() {
   return new Promise((resolve) => {
     debug('Reseting DB...');
@@ -55,23 +62,32 @@ function resetDb() {
 }
 
 function populateUsers() {
-  return new Promise((resolve) => {
-    resetDb()
-      .then(() => {
-        debug('Populating DB...');
-        users.forEach((user) => {
-          new User(_.pick(user, requiredProperties.concat(optionalProperties))).createUser();
-        });
-        session.run(
-          'MATCH (a:User), (b:User) WHERE a.username=$a_username AND b.username=$b_username CREATE (a)-[r:LIKES]->(b) RETURN r',
-          { a_username: 'Claude', b_username: 'Bob' },
-        )
-          .then(() => (session.close()))
-          .catch(err => debug(err));
-      })
+  const promises = [];
+  debug('Populating DB...');
+  users.forEach((user) => {
+    const p = new User(_.pick(user, requiredProperties.concat(optionalProperties))).createUser();
+    promises.push(p);
+  });
+  return Promise.all(promises);
+}
+
+function createRelationships() {
+  return new Promise((resolve, reject) => {
+    debug('Creating Relationships...');
+    new RelationShips(relationships).addRelationShip()
       .then(() => resolve(true))
-      .catch(err => debug(err));
+      .catch(err => reject(err));
   });
 }
 
-module.exports = populateUsers;
+function populateDb() {
+  return new Promise((resolve, reject) => {
+    resetDb()
+      .then(() => populateUsers())
+      .then(() => createRelationships())
+      .then(() => resolve(true))
+      .catch(err => reject(err));
+  });
+}
+
+module.exports = populateDb;
