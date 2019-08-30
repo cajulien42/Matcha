@@ -24,9 +24,9 @@ module.exports = class Request {
 
   get() {
     return (
-      axios.get(`http://localhost:3000${this.route}`, { headers: { Authorization: `Bearer ${this.auth}` } })
+      axios.get(`http://localhost:3000${this.route}`, { headers: { 'x-auth-token': this.auth } })
         .then((response) => {
-          debug('Success: ', response.data.payload.users);
+          debug('Success: ', response.data.payload);
           return (response.data.success);
         })
         .catch((error) => {
