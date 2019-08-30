@@ -29,6 +29,12 @@ const newUser = {
   isAdmin: 'true',
 };
 
+const updatedUser = {
+  username: 'Jean',
+  password: 'Test1234*',
+  optional: 'truc',
+};
+
 test('GET request : /api/users/user, expect user list, true', async () => {
   const data = await new Request('/api/users', null).get().catch(err => debug(err));
   return expect(data).toBeTruthy();
@@ -58,4 +64,12 @@ test('GET request : /api/users/Jean, expect user info, true', async () => {
 test('POST request : /api/users, valid user expect user created', async () => {
   const data = await new Request('/api/users/', newUser).post().catch(err => debug(err));
   return expect(data).toBeTruthy();
+});
+
+test('PUT request : /api/users/Jean, valid user expect user created', async () => {
+  const req = {};
+  req.user = updatedUser;
+  req.token = await new Request('/api/auth', validUserAuth).post().catch(err => debug(err));
+  const res = await new Request('/api/users/Jean', req).put().catch(err => debug(err));
+  return expect(res).toBeTruthy();
 });

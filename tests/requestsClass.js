@@ -36,4 +36,18 @@ module.exports = class Request {
     );
   }
 
+  put() {
+    return (
+      axios.put(`http://localhost:3000${this.route}`, this.data.user, { headers: { 'x-auth-token': this.data.token } })
+        .then((response) => {
+          debug('Success: ', response.data.payload);
+          return (response.data.success);
+        })
+        .catch((error) => {
+          debug('Failure:', error.message);
+          return (false);
+        })
+    );
+  }
+
 };
