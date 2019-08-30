@@ -3,14 +3,14 @@ const axios = require('axios');
 
 module.exports = class Request {
 
-  constructor(route, auth) {
+  constructor(route, data) {
     this.route = route;
-    this.auth = auth;
+    this.data = data;
   }
 
-  authenticate() {
+  post() {
     return (
-      axios.post(`http://localhost:3000${this.route}`, this.auth)
+      axios.post(`http://localhost:3000${this.route}`, this.data)
         .then((response) => {
           debug('Success: ', response.data.payload);
           return (response.data.payload);
@@ -24,7 +24,7 @@ module.exports = class Request {
 
   get() {
     return (
-      axios.get(`http://localhost:3000${this.route}`, { headers: { 'x-auth-token': this.auth } })
+      axios.get(`http://localhost:3000${this.route}`, { headers: { 'x-auth-token': this.data } })
         .then((response) => {
           debug('Success: ', response.data.payload);
           return (response.data.success);

@@ -20,6 +20,15 @@ const invalidUserAuth = {
   password: 'Test12*',
 };
 
+const newUser = {
+  username: 'Claudinete',
+  password: 'Test12345*',
+  email: 'cludne@gmail.com',
+  birthyear: '1905',
+  optional: 'lalala',
+  isAdmin: 'true',
+};
+
 test('GET request : /api/users/user, expect user list, true', async () => {
   const data = await new Request('/api/users', null).get().catch(err => debug(err));
   return expect(data).toBeTruthy();
@@ -31,17 +40,22 @@ test('GET request : /api/users/user, invalid Auth expect 401 error', async () =>
 });
 
 test('POST request : /api/auth, expect valid jwt', async () => {
-  const data = await new Request('/api/auth', validUserAuth).authenticate().catch(err => debug(err));
+  const data = await new Request('/api/auth', validUserAuth).post().catch(err => debug(err));
   return expect(data).toMatch(/^[A-Za-z0-9-_=]+\.[A-Za-z0-9-_=]+\.?[A-Za-z0-9-_.+/=]*$/);
 });
 
-test('POST request : /api/auth, valid user expect 400 error', async () => {
-  const data = await new Request('/api/auth', invalidUserAuth).authenticate().catch(err => debug(err));
+test('POST request : /api/auth, invalid user expect 400 error', async () => {
+  const data = await new Request('/api/auth', invalidUserAuth).post().catch(err => debug(err));
   return expect(data).toBe(false);
 });
 
 test('GET request : /api/users/Jean, expect user info, true', async () => {
-  const data = await new Request('/api/auth', validUserAuth).authenticate().catch(err => debug(err));
+  const data = await new Request('/api/auth', validUserAuth).post().catch(err => debug(err));
   const res = await new Request('/api/users/Jean', data).get().catch(err => debug(err));
   return expect(res).toBeTruthy();
+});
+
+test('POST request : /api/users, valid user expect user created', async () => {
+  const data = await new Request('/api/users/', newUser).post().catch(err => debug(err));
+  return expect(data).toBeTruthy();
 });
