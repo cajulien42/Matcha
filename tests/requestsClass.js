@@ -50,4 +50,18 @@ module.exports = class Request {
     );
   }
 
+  delete() {
+    return (
+      axios.delete(`http://localhost:3000${this.route}`, { headers: { 'x-auth-token': this.data } })
+        .then((response) => {
+          debug('Success: ', response.data.payload);
+          return (response.data.success);
+        })
+        .catch((error) => {
+          debug('Failure:', error.message);
+          return (false);
+        })
+    );
+  }
+
 };

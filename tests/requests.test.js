@@ -1,14 +1,12 @@
 const debug = require('debug')('app:test');
 const each = require('jest-each').default;
-// const getUsers = require('./requests');
 const Request = require('./requestsClass');
 
-// test('GET request : /api/users, expect list of users', () => (
-//   getUsers.then((data) => {
-//     expect(data).toBeTruthy();
-//   })
-//     .catch(err => debug(err))
-// ));
+
+const adminUser = {
+  username: 'Camille',
+  password: 'Test123*',
+};
 
 const validUserAuth = {
   username: 'Jean',
@@ -32,7 +30,7 @@ const newUser = {
 const updatedUser = {
   username: 'Jean',
   password: 'Test1234*',
-  optional: 'truc',
+  optional: 'truc2',
 };
 
 test('GET request : /api/users/user, expect user list, true', async () => {
@@ -66,10 +64,38 @@ test('POST request : /api/users, valid user expect user created', async () => {
   return expect(data).toBeTruthy();
 });
 
-test('PUT request : /api/users/Jean, valid user expect user created', async () => {
+test('PUT request : /api/users/Jean, valid user expect user updated', async () => {
   const req = {};
   req.user = updatedUser;
   req.token = await new Request('/api/auth', validUserAuth).post().catch(err => debug(err));
   const res = await new Request('/api/users/Jean', req).put().catch(err => debug(err));
+  return expect(res).toBeTruthy();
+});
+
+test('PUT request : /api/users/Jean, wrong user expect error 403:forbidden', async () => {
+  const req = {};
+  req.user = updatedUser;
+  req.token = await new Request('/api/auth', newUser).post().catch(err => debug(err));
+  const res = await new Request('/api/users/Jean', req).put().catch(err => debug(err));
+  return expect(res).toBe(false);
+});
+
+test('PUT request : /api/users/Jean, Admin user expect user updated', async () => {
+  const req = {};
+  req.user = updatedUser;
+  req.token = await new Request('/api/auth', adminUser).post().catch(err => debug(err));
+  const res = await new Request('/api/users/Jean', req).put().catch(err => debug(err));
+  return expect(res).toBeTruthy();
+});
+
+test('DEL request : /api/users/Claude, wrong user expect error 403:forbidden', async () => {
+  const data = await new Request('/api/auth', newUser).post().catch(err => debug(err));
+  const res = await new Request('/api/users/Claude', data).delete().catch(err => debug(err));
+  return expect(res).toBe(false);
+});
+
+test('DEL request : /api/users/Claude, Admin user expect user deleted', async () => {
+  const data = await new Request('/api/auth', adminUser).post().catch(err => debug(err));
+  const res = await new Request('/api/users/Claude', data).delete().catch(err => debug(err));
   return expect(res).toBeTruthy();
 });
