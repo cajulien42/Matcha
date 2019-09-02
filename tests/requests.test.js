@@ -18,9 +18,17 @@ const invalidUserAuth = {
   password: 'Test12*',
 };
 
-const newUser = {
+const validNewUser = {
   username: 'Claudinete',
   password: 'Test12345*',
+  email: 'cludne@gmail.com',
+  birthyear: '1905',
+  optional: 'lalala',
+  isAdmin: 'true',
+};
+
+const invalidNewUser = {
+  username: 'Claudinete',
   email: 'cludne@gmail.com',
   birthyear: '1905',
   optional: 'lalala',
@@ -60,8 +68,13 @@ test('GET request : /api/users/Jean, expect user info, true', async () => {
 });
 
 test('POST request : /api/users, valid user expect user created', async () => {
-  const data = await new Request('/api/users/', newUser).post().catch(err => debug(err));
+  const data = await new Request('/api/users/', validNewUser).post().catch(err => debug(err));
   return expect(data).toBeTruthy();
+});
+
+test('POST request : /api/users, invalid user expect error', async () => {
+  const data = await new Request('/api/users/', invalidNewUser).post().catch(err => debug(err));
+  return expect(data).toBe(false);
 });
 
 test('PUT request : /api/users/Jean, valid user expect user updated', async () => {
@@ -75,7 +88,7 @@ test('PUT request : /api/users/Jean, valid user expect user updated', async () =
 test('PUT request : /api/users/Jean, wrong user expect error 403:forbidden', async () => {
   const req = {};
   req.user = updatedUser;
-  req.token = await new Request('/api/auth', newUser).post().catch(err => debug(err));
+  req.token = await new Request('/api/auth', validNewUser).post().catch(err => debug(err));
   const res = await new Request('/api/users/Jean', req).put().catch(err => debug(err));
   return expect(res).toBe(false);
 });
@@ -89,13 +102,13 @@ test('PUT request : /api/users/Jean, Admin user expect user updated', async () =
 });
 
 test('DEL request : /api/users/Claude, wrong user expect error 403:forbidden', async () => {
-  const data = await new Request('/api/auth', newUser).post().catch(err => debug(err));
-  const res = await new Request('/api/users/Claude', data).delete().catch(err => debug(err));
+  const data = await new Request('/api/auth', validNewUser).post().catch(err => debug(err));
+  const res = await new Request('/api/users/Claudinete', data).delete().catch(err => debug(err));
   return expect(res).toBe(false);
 });
 
 test('DEL request : /api/users/Claude, Admin user expect user deleted', async () => {
   const data = await new Request('/api/auth', adminUser).post().catch(err => debug(err));
-  const res = await new Request('/api/users/Claude', data).delete().catch(err => debug(err));
+  const res = await new Request('/api/users/Claudinete', data).delete().catch(err => debug(err));
   return expect(res).toBeTruthy();
 });

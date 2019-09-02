@@ -20,7 +20,7 @@ class Relationships extends User {
 
   addRelationShip() {
     return new Promise((resolve, reject) => {
-      debug(this.relation.user_a, this.relation.user_b, this.relation.relation);
+      debug(this.relation.user_a, this.relation.user_b, this.relation.type);
       const query = `MATCH (a:User {username: '${this.relation.user_a}'}), (b:User {username: '${this.relation.user_b}'}) CREATE (a)-[r:${this.relation.type}]->(b) RETURN type(r)`;
       session.run(query)
         .then((res) => {

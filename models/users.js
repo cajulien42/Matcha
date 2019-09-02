@@ -6,6 +6,7 @@ const _ = require('lodash');
 const neo4j = require('neo4j-driver').v1;
 const bcrypt = require('bcrypt');
 const Validator = require('./validator');
+const userTemplate = require('../tests/usertemplate');
 
 const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '123456'));
 const session = driver.session();
@@ -19,9 +20,15 @@ class User {
       this.user.username = user;
     }
 
-    this.allProperties = ['username', 'password', 'email', 'birthyear', 'optional', 'isAdmin'];
-    this.publicProperties = ['username', 'email', 'birthyear', 'optional'];
-    this.optionalProperties = ['optional', 'isAdmin'];
+    this.allProperties = [];
+    this.publicProperties = [];
+    this.optionalProperties = [];
+
+    Object.keys(userTemplate).forEach((property) => {
+      this.allProperties.push(property);
+      if (userTemplate[property].public === true) this.publicProperties.push(property);
+      if (userTemplate[property].public === true) this.optionalProperties.push(property);
+    });
 
     this.creationRequirements = {
       username: true,

@@ -40,10 +40,10 @@ class Validator {
       if (this.req.isAdmin) sch.isAdmin = Joi.string().alphanum().min(3).max(30).required();
       else sch.isAdmin = Joi.string().alphanum().min(3).max(30);
 
-      Joi.validate(this.data, sch)
-        .then(() => resolve(this.data))
-        .catch(err => reject(err));
-
+      Joi.validate(this.data, sch, (err, value) => {
+        if (err === null) resolve({ success: true, value });
+        else reject(err);
+      });
     });
   }
 }
