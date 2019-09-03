@@ -8,19 +8,19 @@ module.exports = {
   },
   password: {
     type: 'string',
-    valid: ['Test123*', 'wqupLqxs5#', 'Ttruc20u&', 'Lala123456*', 'chIantIse_'],
+    valid: ['Test123*', 'wqupLqxs5#', 'Ttruc20u&', 'Lala123456*', 'chIantIse_1'],
     invalid: ['test', 't1*tei', 'Test', '=/*+-=<', 'Test1234<', 0, null],
     public: true,
   },
   email: {
     type: 'string',
-    valid: ['test1@gmail.com', 'example@example.com', 'jean.paul@hotmail.fr', 'GAUTIER@yahoo.fr', 'testqment666666@hotmail.com'],
+    valid: ['test1@gmail.com', 'example@example.com', 'jean.paul@hotmail.fr', 'GAUTIER@yahoo.fr', 'testament666666@hotmail.com'],
     invalid: ['test', 'test@gmail.gmail.gmail.com', '1@yahoo.fr', '<kamille@gmail.com', '42', 0, null],
     public: false,
   },
   birthyear: {
     type: 'string',
-    valid: ['1900', '2001', '2005', '2008', '2012'],
+    valid: ['1900', '2001', '1990', '1980', '1942'],
     invalid: ['1899', '2005', 'test', 0, null],
     public: false,
   },

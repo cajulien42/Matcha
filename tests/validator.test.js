@@ -1,5 +1,6 @@
 const debug = require('debug')('app:test');
 const each = require('jest-each').default;
+const _ = require('lodash');
 const Validator = require('../models/validator');
 const userTemplate = require('./usertemplate');
 
@@ -22,11 +23,35 @@ const fullRequirements = {
 };
 
 // Valid Inputs
-const validData = {};
 
-Object.keys(userTemplate).forEach((key) => {
-  validData[key] = userTemplate[key].valid;
+const validUserData = [];
+for (let i = 0; i < userTemplate.username.valid.length; i += 1) {
+  validUserData.push({
+    username: userTemplate.username.valid[i],
+    password: userTemplate.password.valid[i],
+    email: userTemplate.email.valid[i],
+    birthyear: userTemplate.birthyear.valid[i],
+    optional: userTemplate.optional.valid[i],
+    isAdmin: userTemplate.isAdmin.valid[i % 2],
+  });
+}
+
+const testArray = [];
+validUserData.forEach((user) => {
+  testArray.push([user, noRequirements, true]);
 });
+
+each`
+  property    | requirement    | expected
+  ${testArray[0][0]} | ${testArray[0][1]} | ${testArray[0][2]}
+  ${testArray[1][0]} | ${testArray[1][1]} | ${testArray[1][2]}
+  ${testArray[2][0]} | ${testArray[2][1]} | ${testArray[2][2]}
+  ${testArray[3][0]} | ${testArray[3][1]} | ${testArray[3][2]}
+  ${testArray[4][0]} | ${testArray[4][1]} | ${testArray[4][2]}
+`.test('Valid inputs: $property\n Requirements: $requirement\n Expected: $expected\n', async ({ property, requirement, expected }) => {
+    const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
+    return expect(promise.success).toBe(expected);
+  });
 
 
 const validUsers = [
