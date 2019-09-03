@@ -36,23 +36,107 @@ for (let i = 0; i < userTemplate.username.valid.length; i += 1) {
   });
 }
 
-const testArray = [];
+const validArray = [];
 validUserData.forEach((user) => {
-  testArray.push([user, noRequirements, true]);
+  validArray.push([user, noRequirements, true]);
+});
+
+const invalidUserData = [];
+for (let i = 0; i < userTemplate.username.valid.length; i += 1) {
+  validUserData.push({
+    username: userTemplate.username.invalid[i],
+    password: userTemplate.password.valid[i],
+    email: userTemplate.email.valid[i],
+    birthyear: userTemplate.birthyear.valid[i],
+    optional: userTemplate.optional.valid[i],
+    isAdmin: userTemplate.isAdmin.valid[i % 2],
+  });
+}
+
+const l = userTemplate.username.invalid.length;
+for (let i = 0; i < l; i += 1) {
+  invalidUserData.push({
+    username: userTemplate.username.valid[i % l],
+    password: userTemplate.password.invalid[i],
+    email: userTemplate.email.valid[i % l],
+    birthyear: userTemplate.birthyear.valid[i % l],
+    optional: userTemplate.optional.valid[i % l],
+    isAdmin: userTemplate.isAdmin.valid[i % 2],
+  });
+}
+
+for (let i = 0; i < l; i += 1) {
+  invalidUserData.push({
+    username: userTemplate.username.valid[i % l],
+    password: userTemplate.password.valid[i % l],
+    email: userTemplate.email.invalid[i],
+    birthyear: userTemplate.birthyear.valid[i % l],
+    optional: userTemplate.optional.valid[i % l],
+    isAdmin: userTemplate.isAdmin.valid[i % 2],
+  });
+}
+
+for (let i = 0; i < l; i += 1) {
+  invalidUserData.push({
+    username: userTemplate.username.valid[i % l],
+    password: userTemplate.password.valid[i % l],
+    email: userTemplate.email.invalid[i % l],
+    birthyear: userTemplate.birthyear.valid[i],
+    optional: userTemplate.optional.valid[i % l],
+    isAdmin: userTemplate.isAdmin.valid[i % 2],
+  });
+}
+
+for (let i = 0; i < l; i += 1) {
+  invalidUserData.push({
+    username: userTemplate.username.valid[i % l],
+    password: userTemplate.password.valid[i % l],
+    email: userTemplate.email.valid[i % l],
+    birthyear: userTemplate.birthyear.valid[i % l],
+    optional: userTemplate.optional.invalid[i],
+    isAdmin: userTemplate.isAdmin.valid[i % 2],
+  });
+}
+
+for (let i = 0; i < l; i += 1) {
+  invalidUserData.push({
+    username: userTemplate.username.valid[i % l],
+    password: userTemplate.password.valid[i % l],
+    email: userTemplate.email.valid[i % l],
+    birthyear: userTemplate.birthyear.valid[i % l],
+    optional: userTemplate.optional.valid[i % l],
+    isAdmin: userTemplate.isAdmin.invalid[i],
+  });
+}
+
+const invalidArray = [];
+invalidUserData.forEach((user) => {
+  invalidArray.push([user, noRequirements, undefined]);
 });
 
 each`
   property    | requirement    | expected
-  ${testArray[0][0]} | ${testArray[0][1]} | ${testArray[0][2]}
-  ${testArray[1][0]} | ${testArray[1][1]} | ${testArray[1][2]}
-  ${testArray[2][0]} | ${testArray[2][1]} | ${testArray[2][2]}
-  ${testArray[3][0]} | ${testArray[3][1]} | ${testArray[3][2]}
-  ${testArray[4][0]} | ${testArray[4][1]} | ${testArray[4][2]}
+  ${validArray[0][0]} | ${validArray[0][1]} | ${validArray[0][2]}
+  ${validArray[1][0]} | ${validArray[1][1]} | ${validArray[1][2]}
+  ${validArray[2][0]} | ${validArray[2][1]} | ${validArray[2][2]}
+  ${validArray[3][0]} | ${validArray[3][1]} | ${validArray[3][2]}
+  ${validArray[4][0]} | ${validArray[4][1]} | ${validArray[4][2]}
 `.test('Valid inputs: $property\n Requirements: $requirement\n Expected: $expected\n', async ({ property, requirement, expected }) => {
     const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
     return expect(promise.success).toBe(expected);
   });
 
+each`
+  property    | requirement    | expected
+  ${invalidArray[0][0]} | ${invalidArray[0][1]} | ${invalidArray[0][2]}
+  ${invalidArray[1][0]} | ${invalidArray[1][1]} | ${invalidArray[1][2]}
+  ${invalidArray[2][0]} | ${invalidArray[2][1]} | ${invalidArray[2][2]}
+  ${invalidArray[3][0]} | ${invalidArray[3][1]} | ${invalidArray[3][2]}
+  ${invalidArray[4][0]} | ${invalidArray[4][1]} | ${invalidArray[4][2]}
+`.test('Invalid inputs: $property\n Requirements: $requirement\n Expected: $expected\n', async ({ property, requirement, expected }) => {
+    const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
+    return expect(promise).toBe(expected);
+  });
 
 const validUsers = [
   {
