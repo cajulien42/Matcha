@@ -3,9 +3,13 @@ const each = require('jest-each').default;
 const _ = require('lodash');
 const Validator = require('../models/validator');
 const userTemplate = require('./usertemplate');
+const validUserData = require('./validuserdata');
+const invalidUserData = require('./invaliduserdata');
 
 const noRequirements = {
   username: false,
+  firstname: false,
+  lastname: false,
   password: false,
   email: false,
   birthyear: false,
@@ -15,6 +19,8 @@ const noRequirements = {
 
 const fullRequirements = {
   username: true,
+  firstname: true,
+  lastname: true,
   password: true,
   email: true,
   birthyear: true,
@@ -22,92 +28,10 @@ const fullRequirements = {
   isAdmin: true,
 };
 
-// Valid Inputs
-
-const validUserData = [];
-for (let i = 0; i < userTemplate.username.valid.length; i += 1) {
-  validUserData.push({
-    username: userTemplate.username.valid[i],
-    password: userTemplate.password.valid[i],
-    email: userTemplate.email.valid[i],
-    birthyear: userTemplate.birthyear.valid[i],
-    optional: userTemplate.optional.valid[i],
-    isAdmin: userTemplate.isAdmin.valid[i % 2],
-  });
-}
-
 const validArray = [];
 validUserData.forEach((user) => {
   validArray.push([user, noRequirements, true]);
 });
-
-const invalidUserData = [];
-for (let i = 0; i < userTemplate.username.valid.length; i += 1) {
-  validUserData.push({
-    username: userTemplate.username.invalid[i],
-    password: userTemplate.password.valid[i],
-    email: userTemplate.email.valid[i],
-    birthyear: userTemplate.birthyear.valid[i],
-    optional: userTemplate.optional.valid[i],
-    isAdmin: userTemplate.isAdmin.valid[i % 2],
-  });
-}
-
-const l = userTemplate.username.invalid.length;
-for (let i = 0; i < l; i += 1) {
-  invalidUserData.push({
-    username: userTemplate.username.valid[i % l],
-    password: userTemplate.password.invalid[i],
-    email: userTemplate.email.valid[i % l],
-    birthyear: userTemplate.birthyear.valid[i % l],
-    optional: userTemplate.optional.valid[i % l],
-    isAdmin: userTemplate.isAdmin.valid[i % 2],
-  });
-}
-
-for (let i = 0; i < l; i += 1) {
-  invalidUserData.push({
-    username: userTemplate.username.valid[i % l],
-    password: userTemplate.password.valid[i % l],
-    email: userTemplate.email.invalid[i],
-    birthyear: userTemplate.birthyear.valid[i % l],
-    optional: userTemplate.optional.valid[i % l],
-    isAdmin: userTemplate.isAdmin.valid[i % 2],
-  });
-}
-
-for (let i = 0; i < l; i += 1) {
-  invalidUserData.push({
-    username: userTemplate.username.valid[i % l],
-    password: userTemplate.password.valid[i % l],
-    email: userTemplate.email.invalid[i % l],
-    birthyear: userTemplate.birthyear.valid[i],
-    optional: userTemplate.optional.valid[i % l],
-    isAdmin: userTemplate.isAdmin.valid[i % 2],
-  });
-}
-
-for (let i = 0; i < l; i += 1) {
-  invalidUserData.push({
-    username: userTemplate.username.valid[i % l],
-    password: userTemplate.password.valid[i % l],
-    email: userTemplate.email.valid[i % l],
-    birthyear: userTemplate.birthyear.valid[i % l],
-    optional: userTemplate.optional.invalid[i],
-    isAdmin: userTemplate.isAdmin.valid[i % 2],
-  });
-}
-
-for (let i = 0; i < l; i += 1) {
-  invalidUserData.push({
-    username: userTemplate.username.valid[i % l],
-    password: userTemplate.password.valid[i % l],
-    email: userTemplate.email.valid[i % l],
-    birthyear: userTemplate.birthyear.valid[i % l],
-    optional: userTemplate.optional.valid[i % l],
-    isAdmin: userTemplate.isAdmin.invalid[i],
-  });
-}
 
 const invalidArray = [];
 invalidUserData.forEach((user) => {
@@ -133,165 +57,42 @@ each`
   ${invalidArray[2][0]} | ${invalidArray[2][1]} | ${invalidArray[2][2]}
   ${invalidArray[3][0]} | ${invalidArray[3][1]} | ${invalidArray[3][2]}
   ${invalidArray[4][0]} | ${invalidArray[4][1]} | ${invalidArray[4][2]}
+  ${invalidArray[5][0]} | ${invalidArray[5][1]} | ${invalidArray[5][2]}
+  ${invalidArray[6][0]} | ${invalidArray[6][1]} | ${invalidArray[6][2]}
+  ${invalidArray[7][0]} | ${invalidArray[7][1]} | ${invalidArray[7][2]}
+  ${invalidArray[8][0]} | ${invalidArray[8][1]} | ${invalidArray[8][2]}
+  ${invalidArray[9][0]} | ${invalidArray[9][1]} | ${invalidArray[9][2]}
+  ${invalidArray[10][0]} | ${invalidArray[10][1]} | ${invalidArray[10][2]}
+  ${invalidArray[11][0]} | ${invalidArray[11][1]} | ${invalidArray[11][2]}
+  ${invalidArray[12][0]} | ${invalidArray[12][1]} | ${invalidArray[12][2]}
+  ${invalidArray[13][0]} | ${invalidArray[13][1]} | ${invalidArray[13][2]}
+  ${invalidArray[14][0]} | ${invalidArray[14][1]} | ${invalidArray[14][2]}
+  ${invalidArray[15][0]} | ${invalidArray[15][1]} | ${invalidArray[15][2]}
+  ${invalidArray[16][0]} | ${invalidArray[16][1]} | ${invalidArray[16][2]}
+  ${invalidArray[17][0]} | ${invalidArray[17][1]} | ${invalidArray[17][2]}
+  ${invalidArray[18][0]} | ${invalidArray[18][1]} | ${invalidArray[18][2]}
+  ${invalidArray[19][0]} | ${invalidArray[19][1]} | ${invalidArray[19][2]}
+  ${invalidArray[20][0]} | ${invalidArray[20][1]} | ${invalidArray[20][2]}
+  ${invalidArray[21][0]} | ${invalidArray[21][1]} | ${invalidArray[21][2]}
+  ${invalidArray[22][0]} | ${invalidArray[22][1]} | ${invalidArray[22][2]}
+  ${invalidArray[23][0]} | ${invalidArray[23][1]} | ${invalidArray[23][2]}
+  ${invalidArray[24][0]} | ${invalidArray[24][1]} | ${invalidArray[24][2]}
+  ${invalidArray[25][0]} | ${invalidArray[25][1]} | ${invalidArray[25][2]}
+  ${invalidArray[26][0]} | ${invalidArray[26][1]} | ${invalidArray[26][2]}
+  ${invalidArray[27][0]} | ${invalidArray[27][1]} | ${invalidArray[27][2]}
+  ${invalidArray[28][0]} | ${invalidArray[28][1]} | ${invalidArray[28][2]}
+  ${invalidArray[29][0]} | ${invalidArray[29][1]} | ${invalidArray[29][2]}
+  ${invalidArray[30][0]} | ${invalidArray[30][1]} | ${invalidArray[30][2]}
+  ${invalidArray[31][0]} | ${invalidArray[31][1]} | ${invalidArray[31][2]}
+  ${invalidArray[32][0]} | ${invalidArray[32][1]} | ${invalidArray[32][2]}
+  ${invalidArray[33][0]} | ${invalidArray[33][1]} | ${invalidArray[33][2]}
+  ${invalidArray[34][0]} | ${invalidArray[34][1]} | ${invalidArray[34][2]}
+  ${invalidArray[35][0]} | ${invalidArray[35][1]} | ${invalidArray[35][2]}
+  ${invalidArray[36][0]} | ${invalidArray[36][1]} | ${invalidArray[36][2]}
+  ${invalidArray[37][0]} | ${invalidArray[37][1]} | ${invalidArray[37][2]}
+  ${invalidArray[38][0]} | ${invalidArray[38][1]} | ${invalidArray[38][2]}
+  ${invalidArray[39][0]} | ${invalidArray[39][1]} | ${invalidArray[39][2]}
 `.test('Invalid inputs: $property\n Requirements: $requirement\n Expected: $expected\n', async ({ property, requirement, expected }) => {
-    const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
-    return expect(promise).toBe(expected);
-  });
-
-const validUsers = [
-  {
-    username: 'Jean',
-    password: 'Test123*',
-    email: 'jean@gmail.com',
-    birthyear: '1905',
-  },
-  {
-    username: 'Camille',
-    password: 'Test123*',
-    email: 'kamillejulien@gmail.com',
-    birthyear: '1905',
-    isAdmin: 'true',
-  },
-  {
-    username: 'Bob',
-    password: 'Test123*',
-    email: 'marley@gmail.com',
-    birthyear: '1906',
-  },
-  {
-    username: 'Pilip',
-    password: 'Test123*',
-    email: 'pilip@gmail.com',
-    birthyear: '1998',
-  },
-  {
-    username: 'Claude',
-    password: 'Test123*',
-    email: 'claude@gmail.com',
-    birthyear: '2000',
-  },
-];
-
-// Invalid Inputs
-
-const invalidUsers = [
-  {
-    username: 'Jean',
-    password: 'Test123', // Unsecure password
-    email: 'jean@gmail.com',
-    birthyear: '1905',
-  },
-  {
-    username: 'Camille',
-    password: 'Test123*',
-    email: 'kamillejulien@gmailcom', // Invalid email
-    birthyear: '1905',
-    isAdmin: 'true',
-  },
-  {
-    username: 'Bob',
-    password: 'Test123*',
-    email: 'marley@gmail.com',
-    birthyear: '2020', // Invalide birthyear
-  },
-  {
-    username: 'Pilip-2', // Invalid username
-    password: 'Test123*',
-    email: 'pilip@gmail.com',
-    birthyear: '1998',
-  },
-  {
-    username: 'Pilip2',
-    password: 'Test123*',
-    email: 'pilip@gmail.com',
-    birthyear: '1998',
-    optional: '987*', // Invalid optional
-  },
-];
-
-const incompleteUsers = [
-  {
-    // Missing username
-    password: 'Test123*',
-    email: 'kamillejulien@gmail.com',
-    birthyear: '1905',
-    isAdmin: 'true',
-    optional: 'test',
-  },
-  {
-    username: 'Camille',
-    // Missing password
-    email: 'kamillejulien@gmail.com',
-    birthyear: '1905',
-    isAdmin: 'true',
-    optional: 'test',
-  },
-  {
-    username: 'Camille',
-    password: 'Test123*',
-    // Missing email
-    birthyear: '1905',
-    isAdmin: 'true',
-    optional: 'test',
-  },
-  {
-    username: 'Camille',
-    password: 'Test123*',
-    email: 'kamillejulien@gmail.com',
-    // Missing birthyear
-    isAdmin: 'true',
-    optional: 'test',
-  },
-  {
-    username: 'Camille',
-    password: 'Test123*',
-    email: 'kamillejulien@gmail.com',
-    birthyear: '1905',
-    // Missing isAdmin
-    optional: 'test',
-  },
-  {
-    username: 'Camille',
-    password: 'Test123*',
-    email: 'kamillejulien@gmail.com',
-    birthyear: '1905',
-    isAdmin: 'true',
-    // Missing optional
-  },
-];
-
-each`
-  property    | requirement    | expected
-  ${validUsers[0]} | ${noRequirements} | ${true}
-  ${validUsers[1]} | ${noRequirements} | ${true}
-  ${validUsers[2]} | ${noRequirements} | ${true}
-  ${validUsers[3]} | ${noRequirements} | ${true}
-  ${validUsers[4]} | ${noRequirements} | ${true}
-`.test('Valid input: $property\n noRequirements: $requirement\n Expected: $expected\n', async ({ property, requirement, expected }) => {
-    const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
-    return expect(promise.success).toBe(expected);
-  });
-
-each`
-  property    | requirement    | expected
-  ${invalidUsers[0]} | ${noRequirements} | ${undefined}
-  ${invalidUsers[1]} | ${noRequirements} | ${undefined}
-  ${invalidUsers[2]} | ${noRequirements} | ${undefined}
-  ${invalidUsers[3]} | ${noRequirements} | ${undefined}
-  ${invalidUsers[4]} | ${noRequirements} | ${undefined}
-`.test('Invalid input: $property\n Requirements: $requirement\n Expected: validation error\n', async ({ property, requirement, expected }) => {
-    const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
-    return expect(promise).toBe(expected);
-  });
-
-each`
-  property    | requirement    | expected
-  ${incompleteUsers[0]} | ${fullRequirements} | ${undefined}
-  ${incompleteUsers[1]} | ${fullRequirements} | ${undefined}
-  ${incompleteUsers[2]} | ${fullRequirements} | ${undefined}
-  ${incompleteUsers[3]} | ${fullRequirements} | ${undefined}
-  ${incompleteUsers[4]} | ${fullRequirements} | ${undefined}
-`.test('Incomplete input: $property\n Requirements: $requirement\n Expected: validation error\n', async ({ property, requirement, expected }) => {
     const promise = await new Validator(requirement, property).validate().catch(err => debug(err));
     return expect(promise).toBe(expected);
   });

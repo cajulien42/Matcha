@@ -32,6 +32,8 @@ class User {
 
     this.creationRequirements = {
       username: true,
+      firstname: true,
+      lastname: true,
       password: true,
       email: true,
       birthyear: true,

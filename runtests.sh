@@ -1,3 +1,5 @@
 # app:test,
 
-DEBUG=app:test npm test -- --verbose
+#DEBUG=app:test 
+DEBUG=app:reqtest 
+npm test -- --verbose

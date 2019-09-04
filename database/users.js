@@ -9,36 +9,46 @@ const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '
 const session = driver.session();
 
 
-const requiredProperties = ['username', 'password', 'email', 'birthyear'];
+const requiredProperties = ['username','firstname', 'lastname', 'password', 'email', 'birthyear'];
 const optionalProperties = ['optional', 'isAdmin'];
 const users = [
   {
     username: 'Jean',
+    firstname: 'Jean',
+    lastname: 'Camille',
     password: 'Test123*',
     email: 'jean@gmail.com',
     birthyear: '1905',
   },
   {
     username: 'Camille',
+    firstname: 'Jean',
+    lastname: 'Camille',
     password: 'Test123*',
     email: 'kamillejulien@gmail.com',
     birthyear: '1905',
     isAdmin: 'true',
   },
   {
-    username: 'Bob',
+    username: 'Boby',
+    firstname: 'Jean',
+    lastname: 'Camille',
     password: 'Test123*',
     email: 'marley@gmail.com',
     birthyear: '1906',
   },
   {
     username: 'Pilip',
+    firstname: 'Jean',
+    lastname: 'Camille',
     password: 'Test123*',
     email: 'pilip@gmail.com',
     birthyear: '1998',
   },
   {
     username: 'Claude',
+    firstname: 'Jean',
+    lastname: 'Camille',
     password: 'Test123*',
     email: 'claude@gmail.com',
     birthyear: '2000',
@@ -47,7 +57,7 @@ const users = [
 
 const relationships = {
   user_a: 'Jean',
-  user_b: 'Bob',
+  user_b: 'Boby',
   type: 'LIKES',
 };
 

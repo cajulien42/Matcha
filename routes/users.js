@@ -9,7 +9,7 @@ const handler = require('../middleware/handler');
 const router = express.Router();
 const User = require('../models/users');
 
-const validProperties = ['username', 'password', 'email', 'birthyear', 'optional'];
+const validProperties = ['username', 'firstname', 'lastname', 'password', 'email', 'birthyear', 'optional'];
 const publicProperties = ['username', 'email', 'birthyear', 'optional'];
 
 router.use(express.json());

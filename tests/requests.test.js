@@ -1,4 +1,4 @@
-const debug = require('debug')('app:test');
+const debug = require('debug')('app:reqtest');
 const each = require('jest-each').default;
 const Request = require('./requestsClass');
 
@@ -20,6 +20,8 @@ const invalidUserAuth = {
 
 const validNewUser = {
   username: 'Claudinete',
+  firstname: 'camillle',
+  lastname: 'julien',
   password: 'Test12345*',
   email: 'cludne@gmail.com',
   birthyear: '1905',

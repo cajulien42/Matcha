@@ -3,19 +3,31 @@ module.exports = {
   username: {
     type: 'string',
     valid: ['Pilip2', 'Jean', 'claude', 'user4test', '78945'],
-    invalid: ['a', 'truc_', 'qwertyuiopasdfghjklzxcvbnm123456789123456789', '1234', 'yolo', 0, null],
+    invalid: ['a', 'truc_', 'qwertyuiopasdfghjklzxcvbnm123456789123456789', '123', 'yol', 0, null],
     public: true,
+  },
+  firstname: {
+    type: 'string',
+    valid: ['Pilip', 'Jean', 'claude', 'CAMENBERT', 'trucmuch'],
+    invalid: ['a', 'truc_', 'qwertyuiopasdfghjklzxcvbnm123456789123456789', '1234', 'yo', 0, null],
+    public: false,
+  },
+  lastname: {
+    type: 'string',
+    valid: ['Pilip', 'Jean', 'claude', 'CAMENBERT', 'trucmuch'],
+    invalid: ['a', 'truc_', 'qwertyuiopasdfghjklzxcvbnm123456789123456789', '1234', 'yo', 0, null],
+    public: false,
   },
   password: {
     type: 'string',
     valid: ['Test123*', 'wqupLqxs5#', 'Ttruc20u&', 'Lala123456*', 'chIantIse_1'],
-    invalid: ['test', 't1*tei', 'Test', '=/*+-=<', 'Test1234<', 0, null],
+    invalid: ['test', 't1*tei', 'Test', '=/*+-=<', 'test1234<', 0, null],
     public: true,
   },
   email: {
     type: 'string',
     valid: ['test1@gmail.com', 'example@example.com', 'jean.paul@hotmail.fr', 'GAUTIER@yahoo.fr', 'testament666666@hotmail.com'],
-    invalid: ['test', 'test@gmail.gmail.gmail.com', '1@yahoo.fr', '<kamille@gmail.com', '42', 0, null],
+    invalid: ['test', 'test@.com', '@yahoo.fr', '<kamille@gmail.com', '42', 0, null],
     public: false,
   },
   birthyear: {
