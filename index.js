@@ -5,7 +5,6 @@ const express = require('express');
 const helmet = require('helmet');
 const morgan = require('morgan');
 const users = require('./routes/users');
-const home = require('./routes/home');
 const auth = require('./routes/auth');
 const populate = require('./database/users');
 const error = require('./middleware/error');
@@ -23,7 +22,6 @@ app.use(helmet());
 app.use(express.static('public'));
 app.use(morgan('tiny'));
 
-app.use('/', home);
 app.use('/api/users', users);
 app.use('/api/auth', auth);
 

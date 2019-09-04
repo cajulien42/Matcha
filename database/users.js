@@ -9,7 +9,7 @@ const driver = neo4j.driver('bolt://localhost:7687', neo4j.auth.basic('neo4j', '
 const session = driver.session();
 
 
-const requiredProperties = ['username','firstname', 'lastname', 'password', 'email', 'birthyear'];
+const requiredProperties = ['username', 'firstname', 'lastname', 'password', 'email', 'birthyear'];
 const optionalProperties = ['optional', 'isAdmin'];
 const users = [
   {
