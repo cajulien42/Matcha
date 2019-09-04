@@ -25,7 +25,7 @@ class Relationships extends User {
       session.run(query)
         .then((res) => {
           session.close();
-          debug('HAHA', res.records[0]._fields);
+          debug(res.records[0]._fields);
           resolve(res);
         })
         .catch((err) => {
@@ -33,10 +33,6 @@ class Relationships extends User {
           reject(err);
         });
     });
-  }
-
-  deleteRelationships() {
-
   }
 }
 
