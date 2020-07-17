@@ -1,0 +1,76 @@
+{
+	"orderForm": {
+		"birthdate": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "date"
+			},
+			"value": "",
+			"validation": {
+				"regex": "^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$",
+				"rule": "Must be format MM/DD/YYYY"
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Birthdate"
+		},
+		"gender": {
+			"elementType": "radio",
+			"elementConfig": {
+				"options": [
+					{ "value": "male", "displayValue": "Male", "id": "male" },
+					{ "value": "female", "displayValue": "Female", "id": "female" },
+					{ "value": "genderqueer", "displayValue": "Genderqueer", "id": "genderqueer" }
+				],
+				"type": "radio"
+			},
+			"value": "",
+			"validation": {
+				"regex": "^(male|female|genderqueer)$"
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Gender"
+		},
+		"sexOrient": {
+			"elementType": "radio",
+			"elementConfig": {
+				"options": [
+					{ "value": "hetero", "displayValue": "Heterosexual", "id": "hetero" },
+					{ "value": "homo", "displayValue": "Homosexual", "id": "homo" },
+					{ "value": "bi", "displayValue": "Bisexual", "id": "bi" },
+					{ "value": "pan", "displayValue": "Pansexual", "id": "pan" }
+				],
+				"type": "radio"
+			},
+			"value": "",
+			"validation": {
+				"regex": "^(hetero|homo|bi|pan)$"
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Sexual Orientation"
+		},
+		"bio": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "text",
+				"placeholder": "Write something about yourself"
+			},
+			"value": "",
+			"validation": {
+				"minLength": 1,
+				"maxLength": 255,
+				"regex": "^[%5Cw 0-9_-àæéèêëçàùûîïÀÆÉÈÊÇÀÛÙÜÎÏ,.;:?!'\"&%/]{1,255}$",
+				"rule": "You used invalid characters..."
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Bio"
+		}
+	}
+}

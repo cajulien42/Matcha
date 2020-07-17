@@ -1,0 +1,262 @@
+.conteneur {
+  margin: 0;
+  padding: 0;
+}
+
+.NavBar {
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  border-bottom: 1px solid rgb(116, 209, 234);
+}
+
+.logo {
+  list-style: none;
+  width: 100%;
+  margin-left: 10%;
+  margin-top: 5%;
+  margin-bottom: 1%;
+}
+
+.logo > h1 {
+  color: rgb(116, 209, 234);
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  font-size: 5vw;
+}
+
+a, a:hover {
+  text-decoration: none;
+  color: #524a54;
+  width: 100%;
+}
+
+.wrapper {
+  margin: 1% 1% 1% 1%;
+}
+.username {
+  color: rgb(116, 209, 234);
+	display: flex;
+  font-size: 1vw;
+  font-weight: 300;
+}
+
+.buttons {
+	display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.sidebarLogged {
+	display: flex;
+	width: 80%;
+	align-self: center;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 1.2vw;
+	border: 1px solid rgb(116, 209, 234);	
+	border-radius: 2px;
+	margin-bottom: 5px;
+	color: rgb(116, 209, 234);
+  padding-left: 20%;
+	/* padding: 5px 15px 5px 24px; */
+	cursor: pointer;
+}
+
+.sidebarLogged:focus {
+	outline: 0;
+}
+
+.sidebarLogged:hover {
+	background-color: rgb(116, 209, 234);
+  color: white;
+  width: 80%;
+}
+
+.options {
+  background-color: rgb(116, 209, 234);
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 1% 1% 1% 0%;
+}
+
+.left {
+  margin-left: 3%;
+  width: 70%;
+  display: flex;
+  justify-content: space-around;
+  position: relative;
+}
+
+.left > a {
+  /* width: 100%; */
+  color: white;
+  font-weight: 300;
+  font-size: 1vw;
+  cursor: pointer;
+  padding-top: 0.5%;
+}
+
+.left > a > i {
+  font-size: 2vw;
+  margin-right: 2%;
+}
+
+@media only screen and (max-device-width: 1450px) {
+  .unreadMessages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ff665e;
+    position: absolute;
+    width: 2vh;
+    height: 2vh;
+    top: 0;
+    right: 43.5%;
+    border-radius: 50%;
+    background-color: #ff665e;
+    color: white;
+    text-align: center;
+    font-size: 1vw;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+  }
+}
+
+@media only screen and (min-device-width: 1450px) {
+  .unreadMessages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ff665e;
+    position: absolute;
+    width: 2.5vh;
+    height: 2.5vh;
+    top: -10%;
+    right: 46%;
+    border-radius: 50%;
+    background-color: #ff665e;
+    color: white;
+    text-align: center;
+    font-size: 1vw;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+  }
+}
+
+/* Notifications */
+.right {
+  width: 15%;
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.showNotifs {
+  width: 30%;
+  margin-left: 20%;
+  border: none;
+  background: none;
+  color: white;
+  font-weight: 300;
+  font-size: 2vw;
+}
+.showNotifs:focus {
+  outline: none;
+}
+@media only screen and (max-device-width: 1450px) {
+  .unreadNotifs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ff665e;
+    position: absolute;
+    width: 2vh;
+    height: 2vh;
+    top: 0;
+    right: 30%;
+    border-radius: 50%;
+    background-color: #ff665e;
+    color: white;
+    text-align: center;
+    font-size: 1vw;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+  }
+}
+
+@media only screen and (min-device-width: 1450px) {
+  .unreadNotifs {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid #ff665e;
+    position: absolute;
+    width: 2.5vh;
+    height: 2.5vh;
+    top: 0;
+    right: 30%;
+    border-radius: 50%;
+    background-color: #ff665e;
+    color: white;
+    text-align: center;
+    font-size: 1vw;
+    font-family: 'Ubuntu', sans-serif;
+    font-weight: 400;
+  }
+}
+.notifs {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  align-items: center;
+  z-index: 2;
+  border-radius: 2px;
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 2vw;
+  color: white;
+  top: 134%;
+  right: -7%;
+}
+.notification {
+  width: 100%;
+  height: 100%;
+  padding-top: 2%;
+  padding-bottom: 2%;
+  display: flex;
+  flex-direction: row;
+  justify-content: left;
+  align-items: center;
+  color: white;
+  text-align: center;
+  font-size: 1vw;
+  font-family: 'Ubuntu', sans-serif;
+  font-weight: 400;
+  background: -moz-linear-gradient(0deg, #e2a9e5 15%, rgb(116, 209, 234) 100%) no-repeat;
+	background: -webkit-linear-gradient(0deg, #e2a9e5 15%,rgb(116, 209, 234) 100%) no-repeat;
+	background: linear-gradient(0deg, #e2a9e5 15%,rgb(116, 209, 234) 100%) no-repeat;
+}
+.notification:hover {
+  cursor: pointer;
+  background: -moz-linear-gradient(-45deg, #e188e6 15%, #1a8de6 100%);
+	background: -webkit-linear-gradient(-45deg, #e188e6 15%, #1a8de6 100%);
+  background: linear-gradient(135deg, #e188e6 15%, #1a8de6 100%);
+}
+.profilPic {
+  font-size: 2vw;
+  width: 25%;
+  border-radius: 50%;
+  margin-left: 2%;
+  margin-right: 3%;
+  margin-top: 2%;
+  margin-bottom: 2%;
+}

@@ -1,0 +1,36 @@
+{
+	"orderForm": {
+		"username": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "text",
+				"placeholder": "Your username"
+			},
+			"value": "",
+			"validation": {
+				"required": true, 
+				"minLength": 3,
+				"maxLength": 30,
+				"regex": "^[a-zA-Z -ééèàç]{3,30}$"
+			},
+			"valid": false,
+			"touched": false
+		},
+		"password": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "password",
+				"placeholder": "Your password"
+			},
+			"value": "",
+			"validation": {
+				"required": true, 
+				"minLength": 7,
+				"maxLength": 150,
+				"regex": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%5C$%%5C^&%5C*])(?=.{7,150})"
+			},
+			"valid": false,
+			"touched": false
+		}
+	}
+}

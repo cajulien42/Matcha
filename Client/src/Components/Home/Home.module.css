@@ -1,0 +1,159 @@
+.main {
+	position: relative;
+	display: flex;
+	background-color: white;
+	min-height: 100vh;
+	color: rgb(116, 209, 234);
+	flex-direction: column;
+	/* justify-content: center; */
+	align-items: center;
+}
+
+.uncompleteUser {
+	position: relative;
+	display: flex;
+	background-color: white;
+	min-height: 100vh;
+	color: rgb(116, 209, 234);
+	flex-direction: column;
+	align-items: center;
+}
+
+.uncompleteUser > p {
+	font-size: 2vw;
+	font-weight: 300;
+	margin-top: 5%;
+}
+
+.noSuggestions {
+	display: flex;
+	justify-content: center;
+	margin: 0 auto;
+	font-family: 'Ubuntu', sans-serif;
+	font-weight: 300;
+	font-size: 2vw;
+}
+
+@media only screen and (max-device-width: 1450px) {
+	.geolocCont {
+		width: 90%;
+		margin-top: 3%;
+		/* height: 200%; */
+		height: 30vh;
+		position: relative;
+		justify-content: center;
+		/* top: 120%; */
+	}
+}
+@media only screen and (min-device-width: 1450px) {
+	.geolocCont {
+		width: 90%;
+		margin-top: 3%;
+		height: 30vh;
+		/* height: 200%; */
+		position: relative;
+		justify-content: center;
+		/* top: 120%; */
+	} 
+}
+
+input {
+	border-radius: 3px;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+}
+
+/* Styles for the input */
+div.ReactTags__tagInput {
+    width: 80%;
+    border-radius: 2px;
+    display: inline-block;
+}
+div.ReactTags__tagInput input.ReactTags__tagInputField,
+div.ReactTags__tagInput input.ReactTags__tagInputField:focus {
+    height: 1vh;
+    margin: 0;
+    font-size: 0.5em;
+    width: 100%;
+    border: 1px solid #eee;
+    padding: 0 4px;
+}
+
+/*
+	RANGE & SLIDER
+*/
+@media only screen and (max-device-width: 1450px) {
+	.questionsS3 {
+		font-size: 0.6em;
+		font-weight: 300;
+		position: relative;
+	}
+	.values {
+		font-size: 0.5em;
+		font-weight: 300;
+		font-family: 'Ubuntu', sans-serif;
+		text-align: end;
+	}
+}
+
+@media only screen and (min-device-width: 1450px) {
+	.questionsS3 {
+		font-size: 1.4vw;
+		font-weight: 300;
+		position: relative;
+	}
+	.values {
+		font-weight: 300;
+		font-size: 1vw;
+		font-family: 'Ubuntu', sans-serif;
+		text-align: end;
+	}
+}
+.step3 {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	margin-top: 2%;
+	width: 22%;
+}
+
+/*
+	ARROW SUBMIT BUTTON FOR FILTERS
+*/
+.submit {
+	background-color: none;
+	border: none;
+}
+.submit:focus {
+	outline: 0;
+}
+.submit > i {
+	color: #524a54;
+	font-size: 3vw;
+}
+.submit > i:hover {
+	/* color: #524a54; */
+	background: -moz-linear-gradient(-45deg, #e2a9e5 15%, #2b94e5 100%);
+	background: -webkit-linear-gradient(-45deg, #e2a9e5 15%,#2b94e5 100%);
+	background: linear-gradient(135deg, #e2a9e5 15%,#2b94e5 100%);
+	-webkit-background-clip: text;
+  	-webkit-text-fill-color: transparent;
+	/* font-size: 3vw; */
+}
+
+/* 
+	USERS ICON DISPLAY
+*/
+.wrapper {
+	padding-top: 5%;
+	width: 100%;
+	height: 100%;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	margin-bottom: 2%;
+	/* align-items: center; */
+}

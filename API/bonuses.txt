@@ -1,0 +1,8 @@
+geoloc des targets sur map
+map avec marker des targets
+
+to do: brancher reset password, brancher conf mail, chat/ message read
+verify errors with bad inputs
+validate message content for chat;
+show other users locations on map;
+verify user profile is complete; -> subject

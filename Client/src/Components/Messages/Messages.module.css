@@ -1,0 +1,308 @@
+.main {
+	width: 100%;
+	height: 82.1vh;
+	display: flex;
+	flex-direction: row;
+	position: relative;
+}
+
+
+/*
+	LEFT PART USERS
+*/
+.usersList {
+	border-right: 2px solid rgb(116, 209, 234);
+	width: 40%;
+	min-height: 82.1vh;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	overflow: auto;
+}
+.userDiv {
+	border-bottom: 2px solid rgb(116, 209, 234);
+	border-radius: 2px;
+	position: relative;
+	width: 100%;
+	min-height: 5vh;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center;
+}
+.userDiv:hover {
+	background: -moz-linear-gradient(-45deg, #e2a9e5 15%, #2b94e5 100%);
+	background: -webkit-linear-gradient(-45deg, #e2a9e5 15%,#2b94e5 100%);
+	background: linear-gradient(135deg, #e2a9e5 15%,#2b94e5 100%);
+	border: none;
+}
+.active {
+	background: -moz-linear-gradient(-45deg, #e2a9e5 15%, #2b94e5 100%);
+	background: -webkit-linear-gradient(-45deg, #e2a9e5 15%,#2b94e5 100%);
+	background: linear-gradient(135deg, #e2a9e5 15%,#2b94e5 100%);
+	border: none;
+	color: white;
+}
+.photo {
+	border-radius: 50%;
+	width: 8vw;
+	height: 8vw;
+	margin-right: 2%;
+	margin-left: 2%;
+	padding: 1%;
+}
+.names {
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 2vw;
+	font-weight: 300;
+	color: rgb(116, 209, 234);
+	width: 100%;
+}
+.userDiv:hover .names {
+	color: white;
+	border: none;
+}
+.unreadMessages {
+	display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgb(116, 209, 234);
+    position: relative;
+    width: 2vw;
+    height: 1.5vw;
+    right: 10%;
+    border-radius: 50%;
+	background-color: rgb(116, 209, 234);
+}
+
+
+/*
+	RIGHT PART MESSAGES
+*/
+.messages {
+	width: 60%;
+	min-height: 82.1vh;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	overflow: auto;
+}
+.messagesList {
+	width: 100%;
+	/* min-height: 82.1vh; */
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+p {
+	display: block;
+	margin-bottom: 0.5vh;
+	margin-left: 1%;
+	z-index: 3;
+}
+.takePlaceLeft {
+	display: flex;
+	width: 100%;
+	justify-content: flex-start;
+}
+.speech_bubble {
+	-webkit-filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.15));
+			filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.15));
+	margin: 1%;
+	margin-bottom: 20px;
+	padding: 1%;
+	position: relative;
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 2vw;
+	font-weight: 300;
+	background: rgb(116, 209, 234);
+	border-radius: 2px;
+	color: white;
+	min-width: 30%;
+	max-width: 50%;
+	max-height: 100%;
+}
+.speech_bubble::before {
+	border: 12.5px solid transparent;
+	border-top: 12.5px solid rgb(116, 209, 234);
+	border-bottom: 0;
+	height: 0;
+	width: 0;
+	border-top-width: 12px;
+	content: '';
+	display: block;
+	position: absolute;
+	left: 1vw;
+	bottom: -25px;
+	-webkit-transform-origin: center;
+			transform-origin: center;
+	-webkit-transform: rotate(130deg) skew(-40deg) translateY(16.6666666667px);
+			transform: rotate(130deg) skew(-40deg) translateY(16.6666666667px);
+}
+@media only screen and (max-device-width: 1450px) {
+	.speech_bubble cite {
+		position: absolute;
+		bottom: -1.5vh;
+		left: 5vw;
+		font-size: 1vw;
+		font-style: normal;
+		font-weight: 300;
+		letter-spacing: 0.5px;
+		color: rgb(116, 209, 234);
+	}
+}
+@media only screen and (min-device-width: 1450px) {
+	.speech_bubble cite {
+		position: absolute;
+		bottom: -2.5vh;
+		left: 5vw;
+		font-size: 1vw;
+		font-style: normal;
+		font-weight: 300;
+		letter-spacing: 0.5px;
+		color: rgb(116, 209, 234);
+	}
+}
+
+.takePlaceRight {
+	display: flex;
+	width: 100%;
+	justify-content: flex-end;
+}
+.speech_bubbleSent {
+	-webkit-filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.15));
+			filter: drop-shadow(-1px -1px 2px rgba(0, 0, 0, 0.1)) drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.15));
+	margin: 1%;
+	margin-bottom: 20px;
+	padding: 1%;
+	position: relative;
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 2vw;
+	font-weight: 300;
+	background: rgb(169, 238, 138);
+	border-radius: 2px;
+	color: white;
+	min-width: 30%;
+	max-width: 50%;
+	max-height: 100%;
+}
+.speech_bubbleSent::before {
+	border: 12.5px solid transparent;
+	border-top: 12.5px solid rgb(169, 238, 138);
+	border-bottom: 0;
+	height: 0;
+	width: 0;
+	border-top-width: 12px;
+	content: '';
+	display: block;
+	position: absolute;
+	left: 15vw;
+	bottom: -25px;
+	-webkit-transform-origin: center;
+			transform-origin: center;
+	-webkit-transform: rotate(90deg) skew(-40deg) translateY(16.6666666667px);
+			transform: rotate(90deg) skew(-40deg) translateY(16.6666666667px);
+}
+@media only screen and (max-device-width: 1450px) {
+	.speech_bubbleSent cite {
+		position: absolute;
+		bottom: -1.5vh;
+		left: 0;
+		font-size: 1vw;
+		font-style: normal;
+		font-weight: 300;
+		letter-spacing: 0.5px;
+		color: rgb(169, 238, 138);
+	}	
+}
+@media only screen and (min-device-width: 1450px) {
+	.speech_bubbleSent cite {
+		position: absolute;
+		bottom: -2.5vh;
+		left: 0;
+		font-size: 1vw;
+		font-style: normal;
+		font-weight: 300;
+		letter-spacing: 0.5px;
+		color: rgb(169, 238, 138);
+	}
+}
+
+.lastMessage {
+	margin-bottom: 12%;
+}
+.noMessage {
+	margin: 0 auto;
+	width: 30%;
+	text-align: center;
+	font-family: 'Ubuntu', sans-serif;
+	font-size: 1vw;
+	font-weight: 300;
+	color: #524A54;
+	margin-top: 3%;
+}
+
+/* 
+	SENDBAR FOR MESSAGES
+*/
+.sendBar {
+	/* position: sticky; */
+	/* width: 100%;
+	bottom: 0; */
+	position: absolute;
+	width: 50%;
+	bottom: 1%;
+	right: 5%;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: center;
+	margin-bottom: -1%;
+}
+input {
+	margin-left: 3%;
+	width: 95%;
+}
+.send {
+	margin-left: 2%;
+	margin-right: 5%;
+	padding-bottom: 2%;
+	color: #524A54;
+	cursor: pointer;
+}
+.send:hover {
+	color: rgb(116, 209, 234);
+}
+@media only screen and (max-device-width: 1450px) {
+	.sendBar {
+		/* position: sticky; */
+		/* width: 100%;
+		bottom: 0; */
+		position: absolute;
+		width: 50%;
+		bottom: 1%;
+		right: 5%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: -1%;
+	}
+}
+@media only screen and (min-device-width: 1450px) {
+	.sendBar {
+		/* position: sticky; */
+		/* width: 100%;
+		bottom: 0; */
+		position: absolute;
+		width: 50%;
+		bottom: 3%;
+		right: 5%;
+		display: flex;
+		flex-direction: row;
+		justify-content: center;
+		align-items: center;
+		margin-bottom: -1%;
+	}
+}

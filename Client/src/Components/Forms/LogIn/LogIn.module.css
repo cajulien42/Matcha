@@ -1,0 +1,295 @@
+/*
+	LOG IN BUTTON
+*/
+
+.log {
+	display: flex;
+	flex-direction: column;
+	text-align: center;
+	justify-content: center;
+	margin-right: 2%;
+	background-color: 'white';
+	font-family: 'Ubuntu', sans-serif;
+	/* font-size: 1vw; */
+	list-style: 'none';
+}
+
+.sidebar {
+	display: flex;
+	width: 100%;
+	align-self: center;
+	font-family: 'Ubuntu', sans-serif;
+	font-weight: 300;
+	font-size: 1.2vw;
+	border: 1px solid rgb(116, 209, 234);	
+	border-radius: 2px;
+	margin-bottom: 5px;
+	color: rgb(116, 209, 234);
+	padding: 5px 15px 5px 15px;
+	cursor: pointer;
+}
+
+.sidebar:focus {
+	outline: 0;
+}
+
+.sidebar:hover {
+	background-color: rgb(116, 209, 234);
+	color: white;
+}
+
+/*
+	POPUP WINDOW BASICS
+*/
+
+.popup {  
+	position: fixed;  
+	width: 100%;  
+	height: 100%;
+	font-family: 'Ubuntu', sans-serif;
+	top: 0;  
+	left: 0;  
+	right: 0;  
+	bottom: 0;  
+	margin: auto;
+	z-index: 5;
+}
+
+.popup_inner {
+	display: flex;
+	position: absolute;  
+	left: 25%;  
+	right: 25%;  
+	top: 25%;  
+	bottom: 25%;  
+	margin: auto;  
+	border-radius: 20px;  
+	color:black;
+}
+
+/* 
+	CLOSE BUTTON
+*/
+
+@media only screen and (max-device-width: 375px) {
+	.close {
+		position: relative;
+		left: -45%;
+		display: inline-block;
+		width: 30px;
+		height: 30px;
+		overflow: hidden;
+		background: none;
+		border: none;
+		z-index:50;
+		cursor: pointer;
+	}
+	.close:target {
+		color: rgb(204, 76, 76);
+	}
+}
+
+@media only screen and (min-device-width: 380px) {
+	.close {
+		position: relative;
+		left: -40%;
+		display: inline-block;
+		width: 40px;
+		height: 40px;
+		overflow: hidden;
+		background: none;
+		border: none;
+		cursor: pointer;
+	}
+}
+.close:focus {
+	outline: 0;
+}
+.close:hover::before, .close:hover::after {
+	background: rgb(204, 76, 76);
+}
+.close::before, .close::after {
+	content: '';
+	position: absolute;
+	height: 2px;
+	width: 100%;
+	top: 50%;
+	left: 0;
+	margin-top: -1px;
+	background: #000;
+}
+.close::before {
+	-webkit-transform: rotate(45deg);
+	-moz-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	-o-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+.close::after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	transform: rotate(-45deg);
+}
+.close.heavy::before, .close.heavy::after {
+	height: 12px;
+	margin-top: -6px;
+}
+.close.rounded::before, .close.rounded::after {
+	border-radius: 5px;
+}
+
+/*custom font*/
+@import url(https://fonts.googleapis.com/css?family=Montserrat);
+
+/*
+	FORM STYLES
+*/
+@media only screen and (max-device-width: 375px) {
+	#msform {
+		min-width: 350px;
+		position: relative;
+		text-align: center;
+		margin: 0 auto;
+		left: -40%;
+		top: -20%;
+	}
+}
+
+@media only screen and (min-device-width: 380px) {
+	#msform {
+		width: 100%;
+		max-width: 500px;
+		margin: 0 auto;
+		text-align: center;
+		position: relative;
+	}
+}
+#msform fieldset {
+	background: white;
+	border: 0 none;
+	border-radius: 3px;
+	box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+	padding: 20px 30px;
+	box-sizing: border-box;
+	width: 80%;
+	margin: 0 10%;
+	
+	/*stacking fieldsets above each other*/
+	position: relative;
+}
+/*inputs*/
+#msform input, #msform textarea {
+	outline: none;
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	width: 100%;
+	box-sizing: border-box;
+	font-family: montserrat;
+	color: #2C3E50;
+	font-size: 13px;
+}
+
+/*headings*/
+.fs_title {
+	font-size: 15px;
+	text-transform: uppercase;
+	color: #2C3E50;
+	margin-bottom: 10px;
+}
+.fs_subtitle {
+	font-weight: normal;
+	font-size: 13px;
+	color: #666;
+	margin-bottom: 20px;
+}
+
+.passwdCont {
+	display: flex;
+	flex-direction: row;
+	position: relative;
+}
+
+@media only screen and (max-device-width: 1450px) {
+	.passwdToggle {
+		box-sizing: content-box;
+		position: absolute;
+		left: 85%;
+		bottom: 35%;
+		background: #727272;
+	  	color: white;
+	  	padding: 4px 8px;
+	  	border-radius: 4px;
+	  	font-weight: 700;
+		font-size: .5em;
+		cursor: pointer;
+	}
+}
+
+@media only screen and (min-device-width: 1450px) {
+	.passwdToggle {
+		box-sizing: content-box;
+		position: absolute;
+		bottom: 35%;
+		left: 85%;
+		background: #727272;
+		color: white;
+		padding: 4px 8px;
+		border-radius: 4px;
+		font-weight: 700;
+		font-size: .5em;
+		cursor: pointer;
+	}
+}
+
+.submit_reset {
+	display:flex;
+	flex-direction: column;
+	width: 100%;
+	height: 100%;
+}
+.resetPasswd {
+	font-size: 1vw;
+	font-size: 10px;
+	font-weight: 300;
+	font-family: 'Ubuntu', sans-serif;
+	align-self: flex-end;
+	width: 100%;
+	height: 100%;
+	text-align: end;
+}
+.resetPasswd:hover {
+	width: 100%;
+	height: 100%;
+	align-self: flex-end;
+	text-align: end;
+	color: rgb(116, 209, 234);
+}
+
+/*buttons*/
+#msform .action_button {
+	width: 8vw;
+	background: #27AE60;
+	font-weight: bold;
+	color: white;
+	border: 0 none;
+	border-radius: 1px;
+	cursor: pointer;
+	padding: 10px 5px;
+	margin: 10px 5px;
+	align-self: center;
+}
+#msform .action_button:hover, #msform .action_button:focus {
+	box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+#msform .action_button:disabled {
+	color: #ccc;
+	cursor: not-allowed;
+}
+.submit {
+	font-family: montserrat;
+	font-size: 1.2vw;
+}

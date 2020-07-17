@@ -1,0 +1,16 @@
+{
+  "name": "heart_empty",
+  "css_prefix_text": "icon-",
+  "css_use_suffix": false,
+  "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
+  "glyphs": [
+    {
+      "uid": "3b00728aa97ad1a2581d414bd9d650bc",
+      "css": "heart",
+      "code": 59392,
+      "src": "typicons"
+    }
+  ]
+}

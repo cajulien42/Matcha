@@ -1,0 +1,187 @@
+{
+	"orderForm1": {
+		"firstName": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "text",
+				"placeholder": "First Name"
+			},
+			"value": "",
+			"validation": {
+				"required": true, 
+				"minLength": 2,
+				"maxLength": 18,
+				"regex": "^[a-zA-Z-àæéèêëçàùûîïÀÆÉÈÊÇÀÛÙÜÎÏ]{2,18}$",
+				"rule": "Must not contain anything else than alphabetical characters"
+			},
+			"valid": false,
+			"touched": false,
+			"errorMessage": ""
+		},
+		"lastName": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "text",
+				"placeholder": "Last Name"
+			},
+			"value": "",
+			"validation": {
+				"required": true, 
+				"minLength": 2,
+				"maxLength": 18,
+				"regex": "^[a-zA-Z-àæéèêëçàùûîï ÀÆÉÈÊÇÀÛÙÜÎÏ]{2,18}$",
+				"rule": "Must not contain anything else than alphabetical characters"
+			},
+			"valid": false,
+			"touched": false,
+			"errorMessage": ""
+		},
+		"username": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "text",
+				"placeholder": "Choose a username"
+			},
+			"value": "",
+			"validation": {
+				"required": true, 
+				"minLength": 3,
+				"maxLength": 30,
+				"regex": "^[a-zA-Z0-9_]{3,30}$",
+				"db": true,
+				"rule": "Must not contain anything else than alphabetical characters, numbers or underscores"
+			},
+			"valid": false,
+			"touched": false,
+			"errorMessage": ""
+		},
+		"email": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "email",
+				"placeholder": "E-Mail"
+			},
+			"value": "",
+			"validation": {
+				"required": true,
+				"regex": "^[^%5CW][a-zA-Z0-9_]+(%5C.[a-zA-Z0-9_]+)*%5C@[a-zA-Z0-9_]+(%5C.[a-zA-Z0-9_]+)*%5C.[a-zA-Z]{2,4}$",
+				"rule": "Must be a valid e-mail adress",
+				"checkEmail": true
+			},
+			"valid": false,
+			"touched": false,
+			"errorMessage": ""
+		}
+	},
+	"orderForm2": {
+		"birthdate": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "date"
+			},
+			"value": "",
+			"validation": {
+				"regex": "^[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}$",
+				"rule": "Must be format MM/DD/YYYY"
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Birthdate"
+		},
+		"gender": {
+			"elementType": "radio",
+			"elementConfig": {
+				"options": [
+					{ "value": "male", "displayValue": "Male", "id": "male" },
+					{ "value": "female", "displayValue": "Female", "id": "female" },
+					{ "value": "genderqueer", "displayValue": "Genderqueer", "id": "genderqueer" }
+				],
+				"type": "radio"
+			},
+			"value": "",
+			"validation": {
+				"regex": "^(male|female|genderqueer)$"
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Gender"
+		},
+		"sexualOrient": {
+			"elementType": "radio",
+			"elementConfig": {
+				"options": [
+					{ "value": "hetero", "displayValue": "Heterosexual", "id": "hetero" },
+					{ "value": "homo", "displayValue": "Homosexual", "id": "homo" },
+					{ "value": "bi", "displayValue": "Bisexual", "id": "bi" },
+					{ "value": "pan", "displayValue": "Pansexual", "id": "pan" }
+				],
+				"type": "radio"
+			},
+			"value": "",
+			"validation": {
+				"regex": "^(hetero|homo|bi|pan)$"
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Sexual Orientation"
+		},
+		"bio": {
+			"elementType": "input",
+			"elementConfig": {
+				"type": "text",
+				"placeholder": "Write something about yourself"
+			},
+			"value": "",
+			"validation": {
+				"minLength": 1,
+				"maxLength": 255,
+				"regex": "^[%5Cw 0-9_-àæéèêëçàùûîïÀÆÉÈÊÇÀÛÙÜÎÏ,.;:?!'\"&%/]{1,255}$",
+				"rule": "You used invalid characters..."
+			},
+			"valid": true,
+			"touched": false,
+			"errorMessage": "",
+			"title": "Bio"
+		}
+	},
+	"password": {
+		"elementType": "input",
+		"elementConfig": {
+			"type": "password",
+			"placeholder": "Choose a password"
+		},
+		"value": "",
+		"validation": {
+			"required": true, 
+			"minLength": 7,
+			"maxLength": 150,
+			"regex": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%5C$%%5C^&%5C*])(?=.{7,150})",
+			"rule": "Must have at least: 1 uppercase, 1 lowercase, 1 number and 1 special character"
+		},
+		"valid": false,
+		"touched": false,
+		"score": "",
+		"errorMessage": ""
+	},
+	"cPasswd": {
+		"elementType": "input",
+		"elementConfig": {
+			"type": "password",
+			"placeholder": "Confirm password"
+		},
+		"value": "",
+		"validation": {
+			"required": true, 
+			"minLength": 7,
+			"maxLength": 150,
+			"regex": "^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#%5C$%%5C^&%5C*])(?=.{7,150})"
+		},
+		"valid": false,
+		"touched": false,
+		"score": "",
+		"errorMessage": "Your entry doesn't match its sibling"
+	}
+}

@@ -1,0 +1,74 @@
+{
+  "name": "matcha",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@babel/core": "^7.0.0",
+    "@svgr/cli": "^4.3.3",
+    "@svgr/core": "^4.3.3",
+    "@svgr/rollup": "^4.3.3",
+    "@svgr/webpack": "^4.3.3",
+    "@types/googlemaps": "^3.38.0",
+    "@types/markerclustererplus": "^2.1.33",
+    "@types/react-tag-input": "^6.1.1",
+    "axios": "^0.19.0",
+    "babel": "^6.23.0",
+    "babel-cli": "^6.26.0",
+    "bootstrap": "^4.3.1",
+    "classnames": "^2.2.6",
+    "fast-equals": "^2.0.0",
+    "fontello-cli": "^0.4.0",
+    "google-map-react": "^1.1.5",
+    "jquery": "^1.9.1",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "lodash.isempty": "^4.4.0",
+    "lodash.shuffle": "^4.2.0",
+    "popper.js": "^1.15.0",
+    "rc-slider": "^8.7.0",
+    "react": "^16.9.0",
+    "react-dnd": "^5.0.0",
+    "react-dnd-cjs": "^9.3.9",
+    "react-dnd-html5-backend": "^3.0.2",
+    "react-dnd-html5-backend-cjs": "^9.3.9",
+    "react-dom": "^16.9.0",
+    "react-dual-range-slider": "^1.0.4",
+    "react-geocode": "^0.2.1",
+    "react-router": "^5.0.1",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "^3.1.1",
+    "react-tag-input": "^6.4.1",
+    "socket.io": "^2.3.0",
+    "styled-components": "^4.4.1",
+    "typescript": "^3.6.2",
+    "zxcvbn": "^4.4.2"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "devDependencies": {
+    "ajv": "^6.10.2",
+    "ajv-keywords": "^3.4.1",
+    "babel-loader": "^8.0.6",
+    "eslint": "^6.4.0",
+    "fontello": "^0.5.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}

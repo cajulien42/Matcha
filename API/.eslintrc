@@ -1,0 +1,33 @@
+{
+  "extends": [
+    "airbnb-base"
+  ],
+  "env": {
+    "browser": true,
+    "node": true,
+    "jest": true,
+    "es6": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "allowImportExportEverywhere": true
+  },
+  "rules": {
+    "padded-blocks": "off",
+    "no-console": "warn",
+    "func-names": "off",
+    "no-underscore-dangle": ["error", { "allow": ["_fields"] }],
+    "newline-per-chained-call": "off",
+    "no-unused-vars": "off",
+    "no-param-reassign": [
+      "error",
+      {
+        "props": true,
+        "ignorePropertyModificationsFor": [
+          "req",
+          "res"
+        ]
+      }
+    ]
+  }
+}
