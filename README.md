@@ -4,7 +4,7 @@
 
 <b>Summary:</b> We had to create, in the language of our choice, a dating site. Interaction between users is the heart of the project!
 
-(Group project carried out with [Camille Julien](https://github.com/cajulien42))
+(Group project carried out with [Philippine S](https://github.com/pommedepain))
 
 ## What is Matcha ?
 
@@ -26,7 +26,7 @@ npm start
 ```
 
 <ul>
-  <li>The Client side is launched on the port 3000</li>
-  <li>The API is launched on the port 4000</li>
-  <li>And the sockets are launched on the port 5000</li>
+  <li>The Client side is launched on port 3000</li>
+  <li>The API is launched on port 4000</li>
+  <li>Socket server is launched on port 5000</li>
 </ul>
